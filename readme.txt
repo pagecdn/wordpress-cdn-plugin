@@ -27,7 +27,7 @@ The CDN Enabler plugin has been developed to link your content to the CDN URLs.
 * HTTPS support
 * HTTP/2 support
 * Automatically optimize DNS lookups and HTTP caching by loading [better optimized fonts](https://pagecdn.com/lib/easyfonts)
-* Automatically optimize DNS lookups by changing Public CDN resources to load from single [Public CDN](https://pagecdn.com/dashboard)
+* Automatically optimize DNS lookups by changing all the Public CDN resources to load from single [Public CDN](https://pagecdn.com/dashboard)
 * Automatically optimize delivery by searching and linking library files from [Opensource CDN](https://pagecdn.com/lib) for better performance
 * Automatically optimize delivery by searching and linking theme files from [Opensource Themes CDN](https://pagecdn.com/theme) for better performance
 * Automatically optimize content by searching and linking minified version of files from Public CDN
@@ -39,7 +39,7 @@ The CDN Enabler plugin has been developed to link your content to the CDN URLs.
 
 
 = Contribute =
-* Anyone is welcome to contribute to the plugin on [GitHub](https://github.com/keycdn/cdn-enabler).
+* Anyone is welcome to contribute to the plugin on [GitHub](https://github.com/pagecdn/wordpress-cdn-plugin).
 * Please merge (squash) all your changes into a single commit before you open a pull request.
 
 
