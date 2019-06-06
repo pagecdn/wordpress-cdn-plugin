@@ -21,11 +21,12 @@ A **content delivery network (CDN)** is a network of distributed edge servers, w
 The CDN Enabler plugin has been developed to link your content to the CDN URLs.
 
 = Features =
-* Link assets to load from a CDN
-* Set included directories
-* Define exclusions (directories or extensions)
-* HTTPS support
-* HTTP/2 support
+* Link assets to load from PageCDN
+* Set directories to be optimized through plugin
+* Set directories and file extensions to be ignored
+* Full HTTPS support
+* Full HTTP/2 support
+* HTTP/2 Server Push support (through PageCDN settings panel)
 * Automatically optimize DNS lookups and HTTP caching by loading [better optimized fonts](https://pagecdn.com/lib/easyfonts)
 * Automatically optimize DNS lookups by changing all the Public CDN resources to load from single [Public CDN](https://pagecdn.com/dashboard)
 * Automatically optimize delivery by searching and linking library files from [Opensource CDN](https://pagecdn.com/lib) for better performance
