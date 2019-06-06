@@ -14,3 +14,4 @@ Enable PageCDN to serve your static assets such as images, fonts, CSS or JavaScr
 * Automatically optimize delivery by searching and linking library files from [Opensource CDN](https://pagecdn.com/lib) for better performance
 * Automatically optimize delivery by searching and linking theme files from [Opensource Themes CDN](https://pagecdn.com/theme) for better performance
 * Automatically optimize content by searching and linking minified version of files from Public CDN
+* Remove Query String from static resources
