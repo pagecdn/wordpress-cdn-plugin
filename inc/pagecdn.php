@@ -234,7 +234,7 @@ class PageCDN
 			}
 			
 			$custom_messages = array(
-				400	=> 'PageCDN cannot process the request due to an error in the issued request.'						,
+				400	=> 'PageCDN cannot process the request due to an error in the request.'						,
 				401	=> 'You are not authorized to perform Purge operation.'												,
 				403	=> 'You do not have sufficient permission to perform Purge operation.'								,
 				500	=> 'Some error occured at PageCDN end. If you continue to see this error, please contact support.'	,
@@ -320,7 +320,8 @@ class PageCDN
 		add_option(
 			'pagecdn',
 			[
-				'url'				=> get_option('home')			,
+				//'url'				=> get_option('home')			,
+				'url'				=> ''							,
 				'dirs'				=> 'wp-content,wp-includes'		,
 				'excludes'			=> '.php,.xml'					,
 				'pagecdn_api_key'	=> ''							,
@@ -386,7 +387,8 @@ class PageCDN
 		return wp_parse_args(
 			get_option('pagecdn'),
 			[
-				'url'				=> get_option('home')			,
+				//'url'				=> get_option('home')			,
+				'url'				=> ''							,
 				'dirs'				=> 'wp-content,wp-includes'		,
 				'excludes'			=> '.php,.xml'					,
 				'pagecdn_api_key'	=> ''							,
@@ -417,7 +419,7 @@ class PageCDN
 		$excludes = array_map('trim', explode(',', $options['excludes']));
 
 		return new PageCDN_Rewriter(
-			get_option('home'),
+			/*get_option('home')*/ home_url(),
 			$options['url'],
 			$options['dirs'],
 			$excludes,

@@ -1,17 +1,54 @@
 # PageCDN - WordPress CDN Plugin
 
-Enable PageCDN to serve your static assets such as images, fonts, CSS or JavaScript files in the best way possible. Instead of just replacing hostname with CDN hostname, this plugin takes each resource separately and tries to get its most optimized version from PageCDN using the Public API.
+Instead of just replacing hostname with CDN hostname, PageCDN WordPress Plugin serves your static assets such as images, fonts, CSS or JavaScript files in the best way possible. 
 
-## Features
-* Link assets to load from PageCDN
+For this, it takes each resource separately and tries to get its most optimized version from PageCDN using its Public CDN API. The benefit of loading resources through Public CDN is that such resources are most of the times already available in your visitor's browser saving some bandwidth and loading time. However, if a resource is not available on Public CDN then only as fallback, it simply links the resources through PageCDN, as any other CDN plugin would do, and still get you high brotli compression benefits for compressible resources.
+
+Please note that loading resources from Public CDN reduces your CDN bandwidth cost as Public CDN is available for free.
+
+Also, with PageCDN WordPress Plugin, standard CDN **setup is 10X easier** compared to any other CDN.
+
+
+
+##Which resources are available on PageCDN's Public CDN?
+
+PageCDN's Public CDN hosts the following type of content for free. If this plugin links to such content, **it will not be considered for your CDN bandwidth cost calculation**.
+* Opensource Libraries like [jQuery](https://pagecdn.com/lib/jquery), [bootstrap](https://pagecdn.com/lib/bootstrap), [font awesome](https://pagecdn.com/lib/font-awesome), [angular](https://pagecdn.com/lib/angular.js) etc.
+* Opensource WordPress Themes (mostly hosted on WordPress Themes).
+* Opensource HTML5 themes - like Bootstrap Themes, etc
+* Easy Fonts - A replacement of Google fonts with better caching and easy to use CSS font classes.
+* Patterns from Subtlepatterns.
+* Opensource WordPress Plugins (Coming Soon).
+
+in addition to the above, commercial theme developers may also host their theme files on PageCDN for better cache reuse and performance. However, such Commercial Content is not a part of Public CDN. To know more about whether a theme avails such performance benefits from PageCDN, please consult the theme developer.
+
+
+##Installation
+1. Download the archive by clicking the 'Download' button above.
+2. Upload the entire `pagecdn` folder to the `/wp-content/plugins/` directory on your site
+3. Activate the plugin through the 'Plugins' menu in WordPress admin panel
+4. Click the Settings button on plugin and provide PageCDN API key
+5. Hit 'Save Changes'.
+6. Done :)
+
+
+##Features
+**[PageCDN](https://pagecdn.com) Features**
+* Full HTTPS and HTTP/2 support
+* **Brotli-11 compression** for compressible resources
+* Cache reuse across websites where possible so that even your first time visitors gets a chance to load your site as quickly as it does for repeat visitor
+* HTTP/2 Server Push support (through PageCDN settings panel)
+* **Immutable Caching** support (configurable through PageCDN settings panel)
+
+**Plugin Features**
+* 10X easier setup 
+* Loads assets through PageCDN Global Edge Network
+* Remove Query String from static resources to make them more cacheable
+* Cache reuse across sites that use opensource libraries and opensource WordPress themes
 * Set directories to be optimized through plugin
 * Set directories and file extensions to be ignored
-* Full HTTPS support
-* Full HTTP/2 support
-* HTTP/2 Server Push support (through PageCDN settings panel)
 * Automatically optimize DNS lookups and HTTP caching by loading [better optimized fonts](https://pagecdn.com/lib/easyfonts)
-* Automatically optimize DNS lookups by changing all the Public CDN resources to load from single [Public CDN](https://pagecdn.com/dashboard)
-* Automatically optimize delivery by searching and linking library files from [Opensource CDN](https://pagecdn.com/lib) for better performance
-* Automatically optimize delivery by searching and linking theme files from [Opensource Themes CDN](https://pagecdn.com/theme) for better performance
+* Automatically optimize DNS lookups and delivery by changing resources that load from different Public CDNs to load from single [Public CDN](https://pagecdn.com/dashboard) instead
+* Automatically optimize HTTP caching and delivery by searching and linking opensource library files from [Opensource Libraries CDN](https://pagecdn.com/lib)
+* Automatically optimize HTTP caching and delivery by searching and linking theme files from [Opensource Themes CDN](https://pagecdn.com/theme)
 * Automatically optimize content by searching and linking minified version of files from Public CDN
-* Remove Query String from static resources

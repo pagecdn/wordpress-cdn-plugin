@@ -56,10 +56,76 @@ class PageCDN_Settings
 		if (!isset($data['min_files'])) {
 			$data['min_files'] = 0;
 		}
-		
 		if (!isset($data['pagecdn_api_key'])) {
 			$data['pagecdn_api_key'] = '';
 		}
+		if (!isset($data['url'])) {
+			$data['url'] = '';
+		}
+		
+		
+		$data['pagecdn_api_key']	= trim( $data['pagecdn_api_key'] );
+		
+		
+		if( $data['url'] == '' && strlen( $data['pagecdn_api_key'] ) )
+		{
+			$postdata					= [];
+			$postdata['apikey']			= $data['pagecdn_api_key'];
+			$postdata['repo_name']		= get_bloginfo( 'name' );
+			$postdata['origin_url']		= home_url();
+			$postdata['privacy']		= 'private';
+			
+			$response	= wp_remote_post( "https://pagecdn.com/api/v1/private/repo/create" , [ 'timeout' => 20 , 'body' => $postdata ] );
+			
+			if( is_wp_error( $response ) )
+			{
+				printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
+						esc_html__('Unable to create CDN URL - '. $response->get_error_message(), 'pagecdn')
+						);
+				
+				return;
+			}
+			
+			#	check HTTP response
+			if( is_array( $response ) )
+			{
+				$json	= json_decode( $response['body'] , true );
+				
+				$rc		= ( int ) wp_remote_retrieve_response_code( $response );
+				
+				if( $rc == 200 )
+				{
+					if( isset( $json['response']['cdn_base'] ) && strlen( $json['response']['cdn_base'] ) )
+					{
+						$data['url']	= $json['response']['cdn_base'];
+					}
+				}
+				else
+				{
+					$custom_messages = array(
+						400	=> 'PageCDN cannot process the request due to an error in the issued request.'						,
+						401	=> 'Using PageCDN requires that you fully <a href="https://pagecdn.com/account/activate" target="_blank">activate your account</a> and select a Paid plan.',
+						403	=> 'You do not have sufficient permission to perform Purge operation.'								,
+						500	=> 'Some error occured at PageCDN end. If you continue to see this error, please contact support.'	,
+						503	=> 'PageCDN service is not available temporarily.'													,
+					);
+					
+					if( isset( $custom_messages[$rc] ) )
+					{
+						printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
+								esc_html__('HTTP returned '. $rc .': '.$custom_messages[$rc], 'pagecdn')
+								);
+					}
+					else
+					{
+						printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
+								esc_html__('HTTP returned '. $rc)
+								);
+					}
+				}
+			}
+		}
+		
 		
 		return [
 			'url'				=> esc_url( rtrim( $data['url'] , '/' ) )	,
@@ -123,6 +189,23 @@ class PageCDN_Settings
 					
 					<tr valign="top">
 						<th scope="row">
+							<?php _e("PageCDN API Key", "pagecdn"); ?>
+						</th>
+						<td>
+							<fieldset>
+								<label for="pagecdn_api_key">
+									<input type="text" name="pagecdn[pagecdn_api_key]" id="pagecdn_api_key" value="<?php echo $options['pagecdn_api_key']; ?>" size="64" class="regular-text code" required />
+									
+									<p class="description">
+										<?php _e("* Required. PageCDN API key is required for several CDN operations.", "pagecdn"); ?> <a href="https://pagecdn.com/signup" target="_blank">Signup</a> to get the API Key.
+									</p>
+								</label>
+							</fieldset>
+						</td>
+					</tr>
+					
+					<tr valign="top">
+						<th scope="row">
 							<?php _e("CDN URL", "pagecdn"); ?>
 						</th>
 						<td>
@@ -132,7 +215,7 @@ class PageCDN_Settings
 								</label>
 								
 								<p class="description">
-									<?php _e("Enter the CDN URL without trailing", "pagecdn"); ?> <code>/</code>. <a href="https://pagecdn.com/signup" target="_blank">Signup</a> to get the URL.
+									<?php _e("Optional. If left empty, plugin will automatically fill this field.", "pagecdn"); ?> <!-- <code>/</code>. -->
 								</p>
 							</fieldset>
 						</td>
@@ -149,7 +232,7 @@ class PageCDN_Settings
 								</label>
 								
 								<p class="description">
-									<?php _e("Assets in these directories will be pointed to the CDN URL. Enter the directories separated by", "pagecdn"); ?> <code>,</code>
+									<?php _e("Assets in these <code>,</code> separated directories will be pointed to the CDN URL.", "pagecdn"); ?> 
 								</p>
 							</fieldset>
 						</td>
@@ -167,25 +250,8 @@ class PageCDN_Settings
 								</label>
 								
 								<p class="description">
-									<?php _e("Enter the exclusions (directories or extensions) separated by", "pagecdn"); ?> <code>,</code>
+									<?php _e("Enter the exclusions (directories or extensions) separated by", "pagecdn"); ?> <code>,</code>.
 								</p>
-							</fieldset>
-						</td>
-					</tr>
-					
-					<tr valign="top">
-						<th scope="row">
-							<?php _e("PageCDN API Key", "pagecdn"); ?>
-						</th>
-						<td>
-							<fieldset>
-								<label for="pagecdn_api_key">
-									<input type="text" name="pagecdn[pagecdn_api_key]" id="pagecdn_api_key" value="<?php echo $options['pagecdn_api_key']; ?>" size="64" class="regular-text code" />
-									
-									<p class="description">
-										<?php _e("PageCDN API key is required to purge CDN cache on request.", "pagecdn"); ?>
-									</p>
-								</label>
 							</fieldset>
 						</td>
 					</tr>

@@ -1,6 +1,6 @@
 <?php
 /*
-   Plugin Name: PageCDN
+   Plugin Name: PageCDN - Better CDN Plugin
    Text Domain: pagecdn
    Description: Optimize public and private content delivery with PageCDN.
    Author: PageCDN

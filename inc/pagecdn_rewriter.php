@@ -119,11 +119,17 @@ class PageCDN_Rewriter
 	{
 		static $regex	= [];
 		
+		
 		// check if HTTPS and use CDN over HTTPS enabled
 		//if( !$this->https && isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' )
 		//{
 		//	return $html;
 		//}
+		
+		if( !( strlen( $this->pagecdn_api_key ) && strlen( $this->cdn_url ) ) )
+		{
+			return $html;
+		}
 		
 		if( !count( $regex ) )
 		{
@@ -155,7 +161,7 @@ class PageCDN_Rewriter
 			
 			$regex['site']	= $regex_rule;
 			
-			$regex['fonts']	= "#<link[^>]*href=([\"'](?=https?:|)//fonts\.googleapis\.com/css\?family=[^\"']+[\"'])[^>]*>#";
+			$regex['fonts']	= "#<link[^>]*href=([\"'](https?:|)//fonts\.googleapis\.com/css\?family=[^\"']+[\"'])[^>]*>#";
 			
 			$public_hosts	= [	'cdn\.jsdelivr\.net'			,				#	https://www.jsdelivr.com/
 								'cdnjs\.cloudflare\.com'		,				#	https://cdnjs.com/
