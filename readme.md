@@ -10,7 +10,7 @@ Also, with PageCDN WordPress Plugin, standard CDN **setup is 10X easier** compar
 
 
 
-##Which resources are available on PageCDN's Public CDN?
+## Which resources are available on PageCDN's Public CDN?
 
 PageCDN's Public CDN hosts the following type of content for free. If this plugin links to such content, **it will not be considered for your CDN bandwidth cost calculation**.
 * Opensource Libraries like [jQuery](https://pagecdn.com/lib/jquery), [bootstrap](https://pagecdn.com/lib/bootstrap), [font awesome](https://pagecdn.com/lib/font-awesome), [angular](https://pagecdn.com/lib/angular.js) etc.
@@ -23,7 +23,7 @@ PageCDN's Public CDN hosts the following type of content for free. If this plugi
 in addition to the above, commercial theme developers may also host their theme files on PageCDN for better cache reuse and performance. However, such Commercial Content is not a part of Public CDN. To know more about whether a theme avails such performance benefits from PageCDN, please consult the theme developer.
 
 
-##Installation
+## Installation
 1. Download the archive by clicking the 'Download' button above.
 2. Upload the entire `pagecdn` folder to the `/wp-content/plugins/` directory on your site
 3. Activate the plugin through the 'Plugins' menu in WordPress admin panel
@@ -32,7 +32,7 @@ in addition to the above, commercial theme developers may also host their theme 
 6. Done :)
 
 
-##Features
+## Features
 **[PageCDN](https://pagecdn.com) Features**
 * Full HTTPS and HTTP/2 support
 * **Brotli-11 compression** for compressible resources
