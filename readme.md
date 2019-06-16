@@ -1,4 +1,4 @@
-# PageCDN - WordPress CDN Plugin
+# PageCDN - Better CDN Plugin
 
 Instead of just replacing hostname with CDN hostname, PageCDN WordPress Plugin serves your static assets such as images, fonts, CSS or JavaScript files in the best way possible. 
 
