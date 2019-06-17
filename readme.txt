@@ -24,7 +24,7 @@ Please note that loading resources from Public CDN reduces your CDN bandwidth co
 Also, with PageCDN WordPress Plugin, standard CDN **setup is 10X easier** compared to any other CDN.
 
 
-=Which resources are available on PageCDN's Public CDN?=
+= Which resources are available on PageCDN's Public CDN? =
 
 PageCDN's Public CDN hosts the following type of content for free. If this plugin links to such content, **it will not be considered for your CDN bandwidth cost calculation**.
 * Opensource Libraries like [jQuery](https://pagecdn.com/lib/jquery), [bootstrap](https://pagecdn.com/lib/bootstrap), [font awesome](https://pagecdn.com/lib/font-awesome), [angular](https://pagecdn.com/lib/angular.js) etc.

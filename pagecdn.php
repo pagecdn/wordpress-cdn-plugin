@@ -6,7 +6,7 @@
    Author: PageCDN
    Author URI: https://pagecdn.com
    License: GPLv2 or later
-   Version: 0.1
+   Version: 1.0
  */
 
 /*
