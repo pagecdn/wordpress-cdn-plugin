@@ -1,7 +1,5 @@
 # PageCDN - Easy Speedup
 
-## Free CDN
-
 [PageCDN](https://pagecdn.com)'s free CDN accelerates delivery of opensource content, thousands of WordPress themes and plugins, 
 fonts and more. It takes each resource separately and intelligently optimizes it using the best information available.
 
