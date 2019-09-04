@@ -1,6 +1,7 @@
 	
 	<?php defined( 'ABSPATH' ) OR exit; ?>
 	
+	
 	<div class="wrap">
 		
 		<h2>
@@ -204,6 +205,20 @@
 									</tr>
 									
 								</table>
+								
+							</div>
+							
+						</div>
+						
+						
+						
+						<div class="postbox">
+							
+							<h3 class="hndle">Further Optimization</h3>
+							
+							<div class="inside">
+								
+								<p>PageCDN Plugin is compatible with <u><strong>Autoptimize</strong></u> and <u><strong>WP Super Cache</strong></u>. If you face difficulty in setting up this plugin, you can <a href="https://pagecdn.com/about/contacting-us" target="_blank">get someone from our side</a> to do it for you.</p>
 								
 							</div>
 							

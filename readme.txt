@@ -13,34 +13,26 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 10x easy setup. Serves static assets from CDN with brotli-11 compression. Speed up public & private files and fonts.
 
 
+
 == Description ==
 
-== Free CDN ==
+[PageCDN](https://pagecdn.com)'s free CDN accelerates delivery of opensource content, thousands of WordPress themes and plugins, fonts and more. It takes each resource separately and intelligently optimizes it using the best information available.
 
-[PageCDN](https://pagecdn.com)'s free CDN accelerates delivery of opensource content, thousands of WordPress themes and plugins, 
-fonts and more. It takes each resource separately and intelligently optimizes it using the best information available.
+Instead of just replacing hostname with CDN hostname, PageCDN WordPress Plugin serves your static assets such as images, fonts, CSS or javascript files in the best way possible. For this, it takes each resource separately and tries to get its most optimized version from PageCDN using its Public CDN API. The benefit of loading resources through Public CDN is that such resources are most of the times already available in your visitor's browser cache saving some bandwidth and loading time per page load.
 
-Instead of just replacing hostname with CDN hostname, PageCDN WordPress Plugin serves your static assets such as images, fonts, CSS or 
-javascript files in the best way possible. For this, it takes each resource separately and tries to get its most optimized version 
-from PageCDN using its Public CDN API. The benefit of loading resources through Public CDN is that such resources are most of the 
-times already available in your visitor's browser cache saving some bandwidth and loading time.
-
-Please note that loading resources from Public CDN reduces your CDN bandwidth cost as Public CDN is available for free.
+Please note that loading resources from Public CDN reduces your Premium CDN bandwidth cost as Public CDN is available for free.
 
 
 == Premium CDN ==
 
-If a resource is not available on Public CDN then you will need to optimize it using Premium CDN feature. For resources like your 
-website images and commercial theme/plugin files, etc this plugin simply links the resources through PageCDN using PageCDN Private API, 
-and gets you brotli compression, geographic delivery, HTTP/2 and other benefits that PageCDN offers.
+If a resource is not available on Public CDN then you will need to optimize it using Premium CDN feature. For resources like images and commercial theme/plugin files, etc this plugin simply links them through PageCDN using PageCDN Private API, and gets you brotli compression, geographic delivery, cache reuse, HTTP/2 and other benefits that PageCDN offers.
 
 Also, with PageCDN Plugin, standard CDN **setup is 10X easier** compared to any other CDN Plugin.
 
 
 == Which resources are available on PageCDN's Public CDN? ==
 
-[PageCDN](https://pagecdn.com/)'s Public CDN hosts the following type of content for free. Bandwidth from Public CDN is not considered 
-for your CDN bandwidth cost calculation.
+[PageCDN](https://pagecdn.com/)'s Public CDN hosts the following type of content for free. Bandwidth from Public CDN is not considered for your CDN bandwidth cost calculation.
 * Opensource Libraries.
 * Opensource WordPress Themes.
 * Opensource HTML5 themes.
@@ -48,15 +40,12 @@ for your CDN bandwidth cost calculation.
 * [Patterns](https://pagecdn.com/lib/subtlepatterns) from Subtlepatterns.
 * Opensource WordPress Plugins.
 
-in addition to the above, commercial theme developers may also host their theme files on PageCDN for better cache reuse and 
-performance. However, such Commercial Content is not a part of Public CDN. To know more about whether a theme avails such performance 
-benefits from PageCDN, please consult the theme developer.
+in addition to the above, commercial theme developers may also host their theme files on PageCDN for better cache reuse and performance. However, such Commercial Content is not a part of Public CDN. To know more about whether a theme avails such performance benefits from PageCDN, please consult the theme developer.
 
 
 == Available Opensource Libraries ==
 
-There are currently [100s of libraries](https://pagecdn.com/lib) available on Public CDN. Some noteable libraries are listed on below 
-listed CDN pages:
+There are currently [100s of libraries](https://pagecdn.com/lib) available on Public CDN. Some noteable libraries are listed on below listed CDN pages:
 
 * [jQuery CDN](https://pagecdn.com/lib/jquery)
 * [Bootstrap CDN](https://pagecdn.com/lib/bootstrap)
@@ -75,8 +64,7 @@ listed CDN pages:
 
 
 == Installation ==
-Detailed setup guide is available [here](https://docs.pagecdn.com/quick-start#wordpress-integration). For quick installation, please 
-follow these steps:
+Detailed setup guide is available [here](https://docs.pagecdn.com/quick-start#wordpress-integration). For quick installation, please follow these steps:
 1. Install the plugin from WordPress, and activate it.
 2. Activation will instantly enable all Public CDN features.
 3. Open PageCDN Plugin page from Settings menu.
@@ -110,7 +98,7 @@ follow these steps:
 
 == System Requirements ==
 * PHP >=5.6
-* WordPress >=4.6
+* WordPress >=4.3
 
 
 == Contribute ==
@@ -122,6 +110,10 @@ follow these steps:
 
 
 == Changelog ==
+
+= 3.0 =
+* Several bug fixes.
+* Improved compatibility with 3rd party plugins.
 
 = 2.0 =
 * Several bug fixes.

@@ -8,16 +8,16 @@ fonts and more. It takes each resource separately and intelligently optimizes it
 Instead of just replacing hostname with CDN hostname, PageCDN WordPress Plugin serves your static assets such as images, fonts, CSS or 
 javascript files in the best way possible. For this, it takes each resource separately and tries to get its most optimized version 
 from PageCDN using its Public CDN API. The benefit of loading resources through Public CDN is that such resources are most of the 
-times already available in your visitor's browser cache saving some bandwidth and loading time.
+times already available in your visitor's browser cache saving some bandwidth and loading time per page load.
 
 Please note that loading resources from Public CDN reduces your CDN bandwidth cost as Public CDN is available for free.
 
 
 ## Premium CDN
 
-If a resource is not available on Public CDN then you will need to optimize it using Premium CDN feature. For resources like your 
-website images and commercial theme/plugin files, etc this plugin simply links the resources through PageCDN using PageCDN Private API, 
-and gets you brotli compression, geographic delivery, HTTP/2 and other benefits that PageCDN offers.
+If a resource is not available on Public CDN then you will need to optimize it using Premium CDN feature. For resources like images 
+and commercial theme/plugin files, etc this plugin simply links them through PageCDN using PageCDN Private API, and gets you brotli 
+compression, geographic delivery, cache reuse, HTTP/2 and other benefits that PageCDN offers.
 
 Also, with PageCDN Plugin, standard CDN **setup is 10X easier** compared to any other CDN Plugin.
 
@@ -92,3 +92,4 @@ follow these steps:
 * Automatically optimize HTTP caching and delivery by searching and linking theme files from [Opensource Themes CDN](https://pagecdn.com/theme)
 * Automatically optimize content by searching and linking minified version of files from Public CDN
 * Delivery private content through Premium CDN
+

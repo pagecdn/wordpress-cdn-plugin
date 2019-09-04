@@ -9,10 +9,13 @@
 		
 		if( !PageCDN_is_backend( ) )
 		{
-			add_action( 'template_redirect'						, 'PageCDN_init_buffering'		, 10	);
+			# Compatible with
+			#	autoptimize
+			#	w3total cache page cache feature
+			#	wp super cache page cache feature
+			add_action( 'plugins_loaded'					, 'PageCDN_check_available_plugins'			, PHP_INT_MAX	);
 		}
 		
-		//add_action( 'shutdown'								, 'PageCDN_end_buffering'		, 0		);
 		add_action( 'admin_init'							, 'PageCDN_admin_init'					);
 		add_action( 'admin_menu'							, 'PageCDN_settings_add_page'			);
 		add_filter( 'plugin_action_links_' . PAGECDN_BASE	, 'PageCDN_add_action_link'				);
@@ -77,6 +80,74 @@
 		return 'ba0d29050ebd8fe46915c8a4b8ea5e5263c7ff1e94631ca35d3dffd81338e3da';
 	}
 	
+	function PageCDN_check_available_plugins( )
+	{
+		/*
+		$fullpage_cache_enabled	= false;
+		
+		$minify_merge_enabled	= false;
+		
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		
+		if( is_plugin_active( 'autoptimize/autoptimize.php' ) )
+		{
+			$conf = autoptimizeConfig::instance();
+			
+			if( $conf->get( 'autoptimize_js' ) || $conf->get( 'autoptimize_css' ) )
+			{
+				$minify_merge_enabled	= true;
+			}
+		}
+		
+		if( is_plugin_active( 'w3-total-cache/w3-total-cache.php' ) )
+		{
+			$w3tc_minify	= new W3TC\Minify_Plugin( );
+			
+			//if( $w3tc_minify->can_minify( ) )
+			//{
+				$modules = W3TC\Dispatcher::component( 'ModuleStatus' );
+				
+				$minify_merge_enabled	= ( bool ) $modules->is_enabled( 'minify' );
+				
+				$fullpage_cache_enabled	= ( bool) $modules->is_enabled( 'pgcache' );
+			//}
+		}
+		
+		
+		//	if( class_exists( 'LiteSpeed_Cache' ) || defined( 'LSCWP_DIR' ) )
+			
+		if( is_plugin_active( 'litespeed-cache/litespeed-cache.php' ) )
+		{
+			$minify_merge_enabled	= true;
+			
+			$fullpage_cache_enabled	= true;
+		}
+		
+		
+		if( is_plugin_active( 'wp-super-cache/wp-cache.php' ) )
+		{
+			if( isset( $GLOBALS['cache_enabled'] ) && $GLOBALS['cache_enabled'] )
+			{
+				$fullpage_cache_enabled	= true;
+			}
+		}
+		
+		if( $fullpage_cache_enabled )
+		{
+			//add_filter( 'the_content' , 'PageCDN_end_buffering' , 100 );
+			
+			//add_action( 'wp_enqueue_scripts', function(){print_r( $GLOBALS['wp_scripts']);print_r($GLOBALS['wp_styles']);} , 0 );
+		}
+		
+		*/
+		
+		ob_start( 'PageCDN_end_buffering' );
+		
+		
+		
+	}
+	
+	/*
 	function PageCDN_init_buffering( )
 	{
 		#	https://stackoverflow.com/questions/772510/wordpress-filter-to-modify-final-html-output
@@ -97,9 +168,11 @@
 		
 		echo $final;
 	}
+	*/
 	
 	function PageCDN_end_buffering( $content )
 	{
+		/*
 		if( function_exists( 'autoptimize' ) )
 		{
 			$content	= autoptimize( )->end_buffering( $content );
@@ -170,43 +243,15 @@
 		//		}
 		//	}
 		//}
+		*/
+		
+		
+		
+		$content	= PageCDN_rewriter_rewrite( $content );
 		
 		return $content;
 	}
 	
-	
-	function PageCDN_is_backend( )
-	{
-		static $is_backend = null;
-		
-		if( $is_backend === null )
-		{
-			if( $is_backend	= is_admin( ) )
-			{
-				return $is_backend;
-			}
-			
-			$script	= isset( $_SERVER['PHP_SELF'] ) ? basename( $_SERVER['PHP_SELF'] ) : '';
-			
-			if( $script !== 'index.php' )
-			{
-				if( in_array( $script, [ 'wp-login.php', 'xmlrpc.php', 'wp-cron.php' ] ) )
-				{
-					$is_backend	= true;
-				}
-				else if( defined( 'DOING_CRON' ) && DOING_CRON )
-				{
-					$is_backend	= true;
-				}
-				else if( PHP_SAPI === 'cli' || ( defined( 'WP_CLI' ) && WP_CLI ) )
-				{
-					$is_backend = true;
-				}
-			}
-		}
-		
-		return $is_backend;
-	}
 	
 	function PageCDN_private_cdn_enabled( )
 	{
@@ -334,6 +379,8 @@
 							'cdn\.staticfile\.org'			,	#	http://staticfile.org/
 							'apps\.bdimg\.com'				,	#	http://apps.static-bdimg.com/
 							'yastatic\.net'					,	#	https://tech.yandex.ru/jslibs/
+							'code\.ionicframework\.com'		,	#	https://ionicframework.com/
+							'cdn\.ckeditor\.com'			,	#	https://ckeditor.com/
 							'cdn\.mathjax\.org'				];
 		
 		$regex['public_scripts']	= "#<script[^>]*src=[\"']((?:https?:|)//(?:".implode('|',$public_hosts).")[^\"']+)[\"'][^>]*>#";
@@ -674,291 +721,4 @@
 	
 	
 	
-	
-	#	Admin Functions
-	#---------------------------------------------
-	
-	
-	
-	function PageCDN_add_action_link( $data )
-	{
-		if( !current_user_can( 'manage_options' ) )
-		{
-			return $data;
-		}
-		
-		$settings_url	= add_query_arg( [ 'page' => 'pagecdn' ] , admin_url('options-general.php') );
-		
-		$settings_text	= __("Settings");
-		
-		return array_merge( [ "<a href=\"{$settings_url}\">{$settings_text}</a>" ] , $data );
-	}
-	
-	function PageCDN_compat_check( )
-	{
-		global $wp_version;
-		
-		if( version_compare( $wp_version , PAGECDN_MIN_WP.'alpha' , '<' ) )
-		{
-			show_message( '<div class="error"><p>'. __("<strong>PageCDN - Better WP CDN</strong> plugin is optimized for WordPress ". PAGECDN_MIN_WP .". Please disable the plugin or upgrade your WordPress installation (recommended).", "pagecdn") .'</p></div>' );
-		}
-	}
-	
-	function PageCDN_admin_init( )
-	{
-		load_plugin_textdomain( 'pagecdn' , false , 'pagecdn/lang' );
-		
-		register_setting( 'pagecdn' , 'pagecdn' , 'PageCDN_settings_validate' );
-	}
-	
-	function PageCDN_admin_links( $wp_admin_bar )
-	{
-		global $wp;
-		
-		if( !is_admin_bar_showing( ) || !apply_filters( 'user_can_clear_cache' , current_user_can( 'manage_options' ) ) )
-		{
-			return;
-		}
-		
-		if( !PageCDN_private_cdn_enabled( ) )
-		{
-			return;
-		}
-		
-		// redirect to admin page so we can display message
-		
-		$current_url	= ( isset( $_SERVER['HTTPS'] ) ? 'https' : 'http' ) . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-		
-		$goto_url		= get_admin_url();
-		
-		if( stristr( $current_url , $goto_url ) )
-		{
-			$goto_url	= $current_url;
-		}
-		
-		// add admin purge link
-		$wp_admin_bar->add_menu(
-			[
-				'id'	  => 'purge-pagecdn',
-				'href'   => wp_nonce_url( add_query_arg('pagecdn_action', 'purge', $goto_url ) , '_cdn__purge_nonce' ),
-				'parent' => 'top-secondary',
-				'parent' => false,
-				'title'	 => '<span class="ab-item">'.esc_html__('Purge CDN', 'pagecdn').'</span>',
-				'meta'   => ['title' => esc_html__('Purge CDN', 'pagecdn')],
-			]
-		);
-	}
-	
-	
-	function PageCDN_purge( $data )
-	{
-		if( !PageCDN_private_cdn_enabled( ) )
-		{
-			return;
-		}
-		
-		if( !( isset( $_GET['pagecdn_action'] ) && $_GET['pagecdn_action'] === 'purge' ) )
-		{
-			return;
-		}
-		
-		if( !( isset( $_GET['_wpnonce'] ) && wp_verify_nonce( $_GET['_wpnonce'] , '_cdn__purge_nonce' ) ) )
-		{
-			return;
-		}
-		
-		if( !is_admin_bar_showing( ) )
-		{
-			return;
-		}
-		
-		
-		//$options	= PageCDN_options( );
-		
-		// load if network
-		if ( ! function_exists('is_plugin_active_for_network') ) {
-			require_once( ABSPATH. 'wp-admin/includes/plugin.php' );
-		}
-		
-		
-		$repo		= rawurlencode( ltrim( parse_url( PageCDN_options( 'url' ) , PHP_URL_PATH ) , '/' ) );
-		
-		$apikey		= rawurlencode( PageCDN_options( 'pagecdn_api_key' ) );
-		
-		file_put_contents( PAGECDN_CACHE , json_encode( [] ) );
-		
-		$response	= wp_remote_get( "https://pagecdn.com/api/v2/private/repo/delete-files?repo={$repo}&apikey={$apikey}" , [ 'timeout' => 30 ] );
-		
-		if( is_wp_error( $response ) )
-		{
-			printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
-					esc_html__('Error connecting to API - '. $response->get_error_message(), 'pagecdn')
-					);
-			
-			return;
-		}
-		
-		#	check HTTP response
-		if( is_array( $response ) && is_admin_bar_showing( ) )
-		{
-			$json	= json_decode( $response['body'] , true );
-			
-			$rc		= ( int ) wp_remote_retrieve_response_code( $response );
-			
-			if( $rc == 200 )
-			{
-				printf( '<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
-						esc_html__('Done. Files purged from PageCDN cache.')
-						);
-				
-				wp_remote_get( home_url( ) , [ 'timeout' => 30 ] );
-				
-				return;
-			}
-			
-			$custom_messages = array(
-				400	=> 'PageCDN cannot process the request due to an error in the request.'						,
-				401	=> 'You are not authorized to perform Purge operation.'												,
-				403	=> 'You do not have sufficient permission to perform Purge operation.'								,
-				500	=> 'Some error occured at PageCDN end. If you continue to see this error, please contact support.'	,
-				503	=> 'PageCDN service is not available temporarily.'													,
-			);
-			
-			if( isset( $custom_messages[$rc] ) )
-			{
-				printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
-						esc_html__('HTTP returned '. $rc .': '.$custom_messages[$rc], 'pagecdn')
-						);
-				
-				return;
-			}
-			
-			printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
-					esc_html__('HTTP returned '. $rc)
-					);
-			
-			return;
-		}
-		
-		
-		
-		if( !is_admin( ) )
-		{
-			wp_safe_redirect( remove_query_arg( '_cache' , wp_get_referer( ) ) );
-			
-			die;
-		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	#	Settings
-	#-------------------------------------------
-	
-	function PageCDN_settings_validate( $data )
-	{
-		$data['relative']			= isset( $data['relative'] )		? $data['relative']			: 1;
-		$data['https']				= isset( $data['https'] )			? $data['https']			: 1;
-		$data['fonts']				= isset( $data['fonts'] )			? $data['fonts']			: 0;
-		$data['replace_cdns']		= isset( $data['replace_cdns'] )	? $data['replace_cdns']		: 0;
-		$data['reuse_libs']			= isset( $data['reuse_libs'] )		? $data['reuse_libs']		: 0;
-		$data['min_files']			= isset( $data['min_files'] )		? $data['min_files']		: 0;
-		$data['pagecdn_api_key']	= isset( $data['pagecdn_api_key'] )	? $data['pagecdn_api_key']	: '';
-		$data['url']				= isset( $data['url'] )				? $data['url']				: '';
-		
-		$data['pagecdn_api_key']	= trim( $data['pagecdn_api_key'] );
-		$data['url']				= trim( $data['url'] );
-		
-		
-		if( $data['url'] == '' && strlen( $data['pagecdn_api_key'] ) )
-		{
-			$postdata					= [];
-			$postdata['apikey']			= $data['pagecdn_api_key'];
-			$postdata['repo_name']		= get_bloginfo( 'name' );
-			$postdata['origin_url']		= home_url();
-			$postdata['privacy']		= 'private';
-			
-			$response	= wp_remote_post( "https://pagecdn.com/api/v2/private/repo/create" , [ 'timeout' => 20 , 'body' => $postdata ] );
-			
-			if( is_wp_error( $response ) )
-			{
-				printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
-						esc_html__('Unable to create CDN URL - '. $response->get_error_message(), 'pagecdn')
-						);
-				
-				return;
-			}
-			
-			#	check HTTP response
-			if( is_array( $response ) )
-			{
-				$json	= json_decode( $response['body'] , true );
-				
-				$rc		= ( int ) wp_remote_retrieve_response_code( $response );
-				
-				if( $rc == 200 )
-				{
-					if( isset( $json['response']['cdn_base'] ) && strlen( $json['response']['cdn_base'] ) )
-					{
-						$data['url']	= $json['response']['cdn_base'];
-					}
-				}
-				else
-				{
-					$custom_messages = array(
-						400	=> 'PageCDN cannot process the request due to an error in the issued request.'						,
-						401	=> 'Using PageCDN requires that you fully <a href="https://pagecdn.com/account/activate" target="_blank">activate your account</a> and select a Paid plan.',
-						403	=> 'You do not have sufficient permission to perform Purge operation.'								,
-						500	=> 'Some error occured at PageCDN end. If you continue to see this error, please contact support.'	,
-						503	=> 'PageCDN service is not available temporarily.'													,
-					);
-					
-					if( isset( $custom_messages[$rc] ) )
-					{
-						printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
-								esc_html__('HTTP returned '. $rc .': '.$custom_messages[$rc], 'pagecdn')
-								);
-					}
-					else
-					{
-						printf( '<div class="notice notice-error is-dismissible"><p>%s</p></div>',
-								esc_html__('HTTP returned '. $rc)
-								);
-					}
-				}
-			}
-		}
-		
-		return [
-			'url'				=> esc_url( rtrim( $data['url'] , '/' ) )	,
-			'dirs'				=> esc_attr( $data['dirs'] )				,
-			'excludes'			=> esc_attr( $data['excludes'] )			,
-			'pagecdn_api_key'	=> esc_attr( $data['pagecdn_api_key'] )		,
-			
-			'fonts'				=> ( int ) $data['fonts']					,
-			'replace_cdns'		=> ( int ) $data['replace_cdns']			,
-			'reuse_libs'		=> ( int ) $data['reuse_libs']				,
-			'min_files'			=> ( int ) $data['min_files']				,
-			
-			'relative'			=> ( int ) $data['relative']				,
-			'https'				=> ( int ) $data['https']					,
-		];
-	}
-	
-	function PageCDN_settings_add_page( )
-	{
-		add_options_page( 'PageCDN' , 'PageCDN' , 'manage_options' , 'pagecdn' , 'PageCDN_settings_page' );
-	}
-	
-	function PageCDN_settings_page( )
-	{
-		$options = PageCDN_options();
-		
-		require PAGECDN_DIR . '/settings.php';
-	}
 	
