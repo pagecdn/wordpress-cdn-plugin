@@ -631,79 +631,88 @@
 		}
 		
 		
-		#	Check if content hash exist in Cache
+		#	Check if content hash exist in /cache/cache.json
 		
 		$contents		= '';
 		
-		$contents		= file_get_contents( $url );
+		//$contents		= file_get_contents( $url );
 		
-		$contents_hash	= hash( 'sha256' , $contents );
+		$response		= wp_remote_get( $url );
 		
-		if( isset( $cache[$contents_hash] ) )
+		if( is_array( $response ) )
 		{
-			return $cache[$contents_hash];
-		}
-		
-		
-		#	Check if content hash exists in data.json
-		
-		if( !count( $includes_json ) )
-		{
-			$includes_json	= json_decode( file_get_contents( PAGECDN_DIR . '/data/data.json' ) , true );
-		}
-		
-		if( isset( $includes_json[$contents_hash] ) )
-		{
-			$cache[$contents_hash]	= $includes_json[$contents_hash];
+			$contents	= $response['body'];
 			
-			$cache[$url_hash]		= $includes_json[$contents_hash];
-		}
-		else if( !PageCDN_rewriter_exclude_public_lookup( $url ) )
-		{
-			$optimized	= '';
+			$contents_hash	= hash( 'sha256' , $contents );
 			
-			if( PageCDN_options( 'min_files' ) )
+			if( isset( $cache[$contents_hash] ) )
 			{
-				$optimized	= '&optimized=true';
+				$cache[$url_hash]	= $cache[$contents_hash];
 			}
-			
-			$apikey		= PageCDN_default_apikey( );
-			
-			if( PageCDN_options( 'pagecdn_api_key' ) )
+			else
 			{
-				$apikey	= PageCDN_options( 'pagecdn_api_key' );
-			}
-			
-			//$response	= wp_remote_get( "https://pagecdn.com/api/v2/public/lookup?match=url&url=".rawurlencode($url)."&apikey={$apikey}{$optimized}" );
-			
-			$response	= wp_remote_get( "https://pagecdn.com/api/v2/public/lookup?match=hash&hash={$contents_hash}&apikey={$apikey}{$optimized}" );
-			
-			if( !is_wp_error( $response ) )
-			{
-				$response	= json_decode( $response['body'] , true );
+				#	Check if content hash exists in ./data/data.json
 				
-				if( isset( $response['status'] ) && ( $response['status'] == '200' ) )
+				if( !count( $includes_json ) )
 				{
-					$response	= $response['response'];
+					$includes_json	= json_decode( file_get_contents( PAGECDN_DIR . '/data/data.json' ) , true );
+				}
+				
+				if( isset( $includes_json[$contents_hash] ) )
+				{
+					$cache[$contents_hash]	= $includes_json[$contents_hash];
 					
-					if( isset( $response['count'] ) && $response['count'] )
+					$cache[$url_hash]		= $includes_json[$contents_hash];
+				}
+				else if( !PageCDN_rewriter_exclude_public_lookup( $url ) )
+				{
+					$optimized	= '';
+					
+					if( PageCDN_options( 'min_files' ) )
 					{
-						if( isset( $response['files'][0]['file_url'] ) )
+						$optimized	= '&optimized=true';
+					}
+					
+					$apikey		= PageCDN_default_apikey( );
+					
+					if( PageCDN_options( 'pagecdn_api_key' ) )
+					{
+						$apikey	= PageCDN_options( 'pagecdn_api_key' );
+					}
+					
+					$response	= wp_remote_get( "https://pagecdn.com/api/v2/public/lookup?match=hash&hash={$contents_hash}&apikey={$apikey}{$optimized}" );
+					
+					if( !is_wp_error( $response ) )
+					{
+						$response	= json_decode( $response['body'] , true );
+						
+						if( isset( $response['status'] ) && ( $response['status'] == '200' ) )
 						{
-							$cache[$contents_hash]	= $response['files'][0]['file_url'];
+							$response	= $response['response'];
 							
-							$cache[$url_hash]		= $response['files'][0]['file_url'];
+							if( isset( $response['count'] ) && $response['count'] )
+							{
+								if( isset( $response['files'][0]['file_url'] ) )
+								{
+									$cache[$contents_hash]	= $response['files'][0]['file_url'];
+									
+									$cache[$url_hash]		= $response['files'][0]['file_url'];
+								}
+							}
 						}
 					}
 				}
 			}
 		}
 		
-		if( !isset( $cache[$contents_hash] ) || !isset( $cache[$url_hash] ) )
+		if( !isset( $cache[$url_hash] ) )
+		{
+			$cache[$url_hash]		= $url;
+		}
+		
+		if( isset( $contents_hash ) && !isset( $cache[$contents_hash] ) )
 		{
 			$cache[$contents_hash]	= $url;
-			
-			$cache[$url_hash]		= $url;
 		}
 		
 		$data	= json_encode( $cache );
@@ -712,13 +721,5 @@
 		
 		return $cache[$url_hash];
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
