@@ -1,16 +1,16 @@
-=== PageCDN - Easy Speedup ===
+=== Easy Speedup by PageCDN ===
 Contributors: pagecdn
-Tags: CDN, Optimization, Performance, Pagespeed, SEO, Cache, Content Delivery Network, Public CDN, Opensource CDN, Private CDN, Shared CDN, WordPress CDN, WP CDN, fastest, super, brotli
-Requires at least: 4.3
-Tested up to: 5.2
-Requires PHP: 5.6
+Tags: CDN, Optimization, Performance, Pagespeed, SEO, Cache, Content Delivery Network, Public CDN, Free CDN, Open-source CDN, Private CDN, Shared CDN, WordPress CDN, WP CDN, fastest, super, brotli, CDN Enabler, Autoptimize, WP Super Cache, W3 Total Cache, compress images, image optimizer, image cdn, optimize images, http/2 server push, http server push, http2 server push, server push
+Requires at least: 4.0
+Tested up to: 5.3
+Requires PHP: 5.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 
 
-10x easy setup. Serves static assets from CDN with brotli-11 compression. Speed up public & private files and fonts.
+10x Easy. Serve files from CDN with brotli-11 compression, minify files, optimize images and optimize fonts.
 
 
 
@@ -18,16 +18,14 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 [PageCDN](https://pagecdn.com)'s free CDN accelerates delivery of opensource content, thousands of WordPress themes and plugins, fonts and more. It takes each resource separately and intelligently optimizes it using the best information available.
 
-Instead of just replacing hostname with CDN hostname, PageCDN WordPress Plugin serves your static assets such as images, fonts, CSS or javascript files in the best way possible. For this, it takes each resource separately and tries to get its most optimized version from PageCDN using its Public CDN API. The benefit of loading resources through Public CDN is that such resources are most of the times already available in your visitor's browser cache saving some bandwidth and loading time per page load.
+Instead of just replacing hostname with CDN hostname, PageCDN WordPress Plugin serves your static assets such as images, fonts, CSS or javascript files in the best way possible. For this, it takes each resource separately and tries to load its most optimized version from PageCDN. The benefit of loading resources through Public CDN is that such resources may already be available in your visitor's browser cache saving some bandwidth and reducing page load time.
 
-Please note that loading resources from Public CDN reduces your Premium CDN bandwidth cost as Public CDN is available for free.
+Also, loading resources from Public CDN reduces your Premium CDN bandwidth cost as Public CDN is available for free.
 
 
 == Premium CDN ==
 
-If a resource is not available on Public CDN then you will need to optimize it using Premium CDN feature. For resources like images and commercial theme/plugin files, etc this plugin simply links them through PageCDN using PageCDN Private API, and gets you brotli compression, geographic delivery, cache reuse, HTTP/2 and other benefits that PageCDN offers.
-
-Also, with PageCDN Plugin, standard CDN **setup is 10X easier** compared to any other CDN Plugin.
+Premium CDN optimizes and supercharges delivery of all your website resources. PageCDN uses many advanced techniques to optimize, deliver and caching the content to make your website extremely fast. Also, with PageCDN Plugin, standard **setup is 10X easier** compared to any other CDN Plugin.
 
 
 == Which resources are available on PageCDN's Public CDN? ==
@@ -45,7 +43,7 @@ in addition to the above, commercial theme developers may also host their theme 
 
 == Available Opensource Libraries ==
 
-There are currently [100s of libraries](https://pagecdn.com/lib) available on Public CDN. Some noteable libraries are listed on below listed CDN pages:
+There are currently [100s of libraries](https://pagecdn.com/public-cdn/libs) available on Public CDN. Some noteable libraries are listed on below listed CDN pages:
 
 * [jQuery CDN](https://pagecdn.com/lib/jquery)
 * [Bootstrap CDN](https://pagecdn.com/lib/bootstrap)
@@ -64,52 +62,69 @@ There are currently [100s of libraries](https://pagecdn.com/lib) available on Pu
 
 
 == Installation ==
-Detailed setup guide is available [here](https://docs.pagecdn.com/quick-start#wordpress-integration). For quick installation, please follow these steps:
+
+Detailed setup guide is available [here](https://pagecdn.com/docs/quick-start#wordpress-integration). For quick installation, please follow these steps:
 1. Install the plugin from WordPress, and activate it.
-2. Activation will instantly enable all Public CDN features.
+2. Activation will instantly enable all Free features.
 3. Open PageCDN Plugin page from Settings menu.
-4. Get API Key from [PageCDN Settings](https://pagecdn.com/account/settings) and paste to relevant box in Premium CDN section on Plugin settings page.
+4. Get API Key from [PageCDN Settings](https://pagecdn.com/account/settings/integration) and paste to relevant box in Premium CDN section on Plugin settings page.
 5. Hit 'Save Changes'.
 6. Done :)
 
 
 == CDN Features ==
-* Full HTTPS and HTTP/2 support
-* Brotli-11 compression (configurable through PageCDN dashboard)
+
+* Full HTTPS and HTTP/2
+* Brotli-11 compression
 * Cache reuse across websites where possible so that even your first time visitors gets a chance to load your site as quickly as it does for repeat visitor
-* HTTP/2 Server Push support (configurable through PageCDN dashboard)
-* Immutable Caching support (configurable through PageCDN dashboard)
+* HTTP/2 Server Push (configurable through PageCDN dashboard)
+* Immutable Caching
+* On-the-fly image optimization
+* On-the-fly CSS and JS minification
 * Content delivery from datacenter geographically close to your website visitors
 
 == Plugin Features ==
+
 * 10X easier setup 
 * Loads assets through PageCDN Global Edge Network
 * Remove Query String from static resources to make them more cacheable
 * Cache reuse across sites that use opensource libraries and opensource WordPress themes
 * Leverage browser caching for fonts
+* Image optimization
+* CSS and JS minification
 * Set directories to be optimized through plugin
 * Set directories and file extensions to be ignored
 * Automatically optimize DNS lookups and HTTP caching by loading [better optimized fonts](https://pagecdn.com/lib/easyfonts)
-* Automatically optimize DNS lookups and delivery by changing resources that load from different Public CDNs to load from single [Public CDN](https://pagecdn.com/dashboard) instead
-* Automatically optimize HTTP caching and delivery by searching and linking opensource library files from [Opensource Libraries CDN](https://pagecdn.com/lib)
-* Automatically optimize HTTP caching and delivery by searching and linking theme files from [Opensource Themes CDN](https://pagecdn.com/theme)
+* Automatically optimize DNS lookups and delivery by changing resources that load from different Public CDNs to load from single [Public CDN](https://pagecdn.com/public-cdn) instead
+* Automatically optimize HTTP caching and delivery by searching and linking opensource library files from [Opensource Libraries CDN](https://pagecdn.com/public-cdn/libs)
+* Automatically optimize HTTP caching and delivery by searching and linking theme files from [Opensource Themes CDN](https://pagecdn.com/public-cdn/html5)
 * Automatically optimize content by searching and linking minified version of files from Public CDN
 * Delivery private content through Premium CDN
 
 == System Requirements ==
-* PHP >=5.6
+
+* PHP >=5.1
 * WordPress >=4.3
 
 
 == Contribute ==
+
 * Anyone is welcome to contribute to the plugin on [GitHub](https://github.com/pagecdn/better-wordpress-cdn).
 
 
 == Author ==
+
 * [PageCDN](https://pagecdn.com "PageCDN")
 
 
 == Changelog ==
+
+= 4.0 =
+* Several performance improvements
+* Several new features
+* Support for image optimization
+* Support for css and js minification
+* Support for setting cache control
 
 = 3.0 =
 * Several bug fixes.
@@ -139,5 +154,7 @@ Detailed setup guide is available [here](https://docs.pagecdn.com/quick-start#wo
 
 == Screenshots ==
 
-1. Free CDN Configuration
-2. Premium CDN Configuration
+1. Premium CDN
+2. Optimize Content
+3. Optimize Delivery
+4. Optimize Caching

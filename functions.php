@@ -3,7 +3,7 @@
 	function PageCDN_hooks( )
 	{
 		#	Rewrite content in REST API
-		#	add_filter( 'the_content' , [ 'PageCDN' , 'rewrite_the_content' ] , 100 );
+		#	add_filter( 'the_content' , array( 'PageCDN' , 'rewrite_the_content' ) , 100 );
 		
 		add_action( 'wp_head'								, 'PageCDN_preconnect'			, 0		);
 		
@@ -29,18 +29,32 @@
 	
 	function PageCDN_defaults( )
 	{
-		return [	'url'				=> ''							,
-					'dirs'				=> 'wp-content,wp-includes,min'	,	#/min/ is used by LiteSpeed Cache
-					'excludes'			=> '.php,.xml,.txt'				,
-					'pagecdn_api_key'	=> ''							,
-					'fonts'				=> 1							,
-					'replace_cdns'		=> 1							,
-					'reuse_libs'		=> 1							,
-					'min_files'			=> 1							,
+		return array(
+					'url'					=> ''							,
+					'dirs'					=> 'wp-content,wp-includes,min'	,	#/min/ is used by LiteSpeed Cache
+					'excludes'				=> '.php,.xml,.txt'				,
+					'pagecdn_api_key'		=> ''							,
+					'fonts'					=> 1							,
+					'replace_cdns'			=> 1							,
+					'reuse_libs'			=> 1							,
+					'relative'				=> 1							,
+					'https'					=> 1							,
 					
-					'relative'			=> 1							,
-					'https'				=> 1							,
-				];
+					//Premium features
+					
+					'optimize_images'		=> 0							,
+					'min_files'				=> 0							,
+					'preconnect_hosts'		=> 1							,
+					'preconnect_hosts_list'	=> "https://pagecdn.io\n"		,
+					
+					//Fresh from API. Not stored in Database
+					
+					'compression_level'		=> 0							,
+					'http2_server_push'		=> 0							,
+					'update_css_paths'		=> 0							,
+					'http_cache_ttl'		=> 0							,
+					'cache_control'			=> 0							
+				);
 	}
 	
 	function PageCDN_options( $option = null )
@@ -49,12 +63,38 @@
 		
 		if( $options === null )
 		{
-			$options	= wp_parse_args( get_option( 'pagecdn' ) , PageCDN_defaults( ) );
+			$options	= wp_parse_args( get_option('pagecdn') , PageCDN_defaults( ) );
+			
+			if( is_admin( ) && strlen( $options['pagecdn_api_key'] ) && strlen( $options['url'] ) )
+			{
+				$repo	= trim( parse_url( $options['url'] , PHP_URL_PATH ) , '/' );
+				
+				$apikey	= $options['pagecdn_api_key'];
+				
+				if( $response = PageCDN_get_API_response( '/private/repo/info' , array( 'apikey' => $apikey , 'repo' => $repo ) ) )
+				{
+					if( !PageCDN_display_API_error( $response ) )
+					{
+						$response	= $response['response'];
+						
+						$options['compression_level']	= $response['compression_level'];
+						$options['http2_server_push']	= $response['server_push'] && $response['server_push_trigger'];
+						$options['update_css_paths']	= $response['update_css_paths'];
+						$options['http_cache_ttl']		= strtotime( "+{$response['browser_cache_number']} {$response['browser_cache_period']}" , 0 );
+						$options['cache_control']		= !!$options['http_cache_ttl'];
+					}
+				}
+			}
 		}
 		
-		if( $option && isset( $options[$option] ) )
+		if( $option )
 		{
-			return $options[$option];
+			if( isset( $options[$option] ) )
+			{
+				return $options[$option];
+			}
+			
+			return '';
 		}
 		
 		return $options;
@@ -62,22 +102,27 @@
 	
 	function PageCDN_preconnect( )
 	{
-		echo "\n\n<link rel=\"preconnect\" href=\"https://pagecdn.io\" crossorigin />\n\n";
+		$list	= array_filter( explode( "\n" , PageCDN_options('preconnect_hosts_list') ) );
+		
+		if( count( $list ) )
+		{
+			foreach( $list as $item )
+			{
+				echo "\n<link rel=\"preconnect\" href=\"{$item}\" crossorigin />";
+			}
+			
+			echo "\n";
+		}
 	}
 	
 	function PageCDN_uninstall( )
 	{
-		delete_option( 'pagecdn' );
+		delete_option('pagecdn');
 	}
 	
 	function PageCDN_activation( )
 	{
 		add_option( 'pagecdn' , PageCDN_defaults( ) );
-	}
-	
-	function PageCDN_default_apikey( )
-	{
-		return 'ba0d29050ebd8fe46915c8a4b8ea5e5263c7ff1e94631ca35d3dffd81338e3da';
 	}
 	
 	function PageCDN_check_available_plugins( )
@@ -299,7 +344,7 @@
 	
 	function PageCDN_rewriter_exclude_public_lookup( $asset )
 	{
-		$excludes	= [ '/wp-content/cache/' , '/min/' ];
+		$excludes	= array( '/wp-content/cache/' , '/min/' );
 		
 		foreach( $excludes as $exclude )
 		{
@@ -321,7 +366,7 @@
 	{
 		$input	= array_filter( array_map( 'trim' , explode( ',' , PageCDN_options( 'dirs' ) ) ) );
 		
-		if( $input === [] )
+		if( $input === array() )
 		{
 			return 'wp\-content|wp\-includes|min';
 		}
@@ -331,7 +376,7 @@
 	
 	function PageCDN_rewriter_rewrite( $html )
 	{
-		$regex	= [];
+		$regex	= array();
 		
 		$dirs	= PageCDN_rewriter_get_dir_scope( );
 		
@@ -365,7 +410,8 @@
 		
 		$regex['easy']	= "#<link[^>]*href=([\"'](https?:|)//pagecdn\.io/lib/easyfonts/[^\"']+[\"'])[^>]*>#";
 		
-		$public_hosts	= [	'cdn\.jsdelivr\.net'			,	#	https://www.jsdelivr.com/
+		$public_hosts	= array(
+							'cdn\.jsdelivr\.net'			,	#	https://www.jsdelivr.com/
 							'cdnjs\.cloudflare\.com'		,	#	https://cdnjs.com/
 							'ajax\.aspnetcdn\.com'			,	#	https://docs.microsoft.com/en-us/aspnet/ajax/cdn/overview
 							'ajax\.googleapis\.com'			,	#	https://developers.google.com/speed/libraries/
@@ -381,7 +427,8 @@
 							'yastatic\.net'					,	#	https://tech.yandex.ru/jslibs/
 							'code\.ionicframework\.com'		,	#	https://ionicframework.com/
 							'cdn\.ckeditor\.com'			,	#	https://ckeditor.com/
-							'cdn\.mathjax\.org'				];
+							'cdn\.mathjax\.org'				
+						);
 		
 		$regex['public_scripts']	= "#<script[^>]*src=[\"']((?:https?:|)//(?:".implode('|',$public_hosts).")[^\"']+)[\"'][^>]*>#";
 		
@@ -520,12 +567,14 @@
 	{
 		$url	= $asset[0];
 		
-		if( PageCDN_rewriter_exclude_asset( $url ) )
+		//file_put_contents( PAGECDN_DIR . '/cache/test.txt' , $url . "\n\n" , FILE_APPEND );
+		
+		if( is_admin_bar_showing( ) && isset( $_GET['preview'] ) && ( $_GET['preview'] === 'true' ) )
 		{
 			return $url;
 		}
 		
-		if( is_admin_bar_showing( ) && isset( $_GET['preview'] ) && ( $_GET['preview'] === 'true' ) )
+		if( PageCDN_rewriter_exclude_asset( $url ) )
 		{
 			return $url;
 		}
@@ -569,28 +618,71 @@
 		
 		if( PageCDN_private_cdn_enabled( ) )
 		{
-			return str_replace( $full_blog_url , PageCDN_options( 'url' ) , $url );
+			#	Remove Query String
+			
+			$url	= PageCDN_remove_query_string( $url );
+			
+			if( PageCDN_options('optimize_images') )
+			{
+				if( strpos( $url , ', ' ) )
+				{
+					//Its probably a srcset. Replace extension with optimization flag. Images are already sized.
+					#	https://example.com/image.png 960w, https://example.com/image-300x169.png 300w
+					
+					$replaceable	= '';
+					
+					if( substr_count( $url , '.jpg' ) > 1 )
+					{
+						$replaceable	= '.jpg';
+					}
+					else if( substr_count( $url , '.png' ) > 1 )
+					{
+						$replaceable	= '.png';
+					}
+					else if( substr_count( $url , '.JPG' ) > 1 )
+					{
+						$replaceable	= '.JPG';
+					}
+					else if( substr_count( $url , '.PNG' ) > 1 )
+					{
+						$replaceable	= '.PNG';
+					}
+					else if( substr_count( $url , '.JPEG' ) > 1 )
+					{
+						$replaceable	= '.JPEG';
+					}
+					
+					$url	= str_replace( $replaceable , '._o'. $replaceable , $url ); 
+				}
+				else if( in_array( strtolower( substr( $url , -4 ) ) , array( '.png' , '.jpg' ) ) )
+				{
+					$url	= substr( $url , 0 , -4 ) . '._o' . substr( $url , -4 );
+				}
+			}
+			else if( PageCDN_options('min_files') )
+			{
+				if( !( ( strtolower( substr( $url , -7 ) ) === 'min.css' ) || ( strtolower( substr( $url , -6 ) ) === 'min.js' ) ) )
+				{
+					if( strtolower( substr( $url , -4 ) ) === '.css' )
+					{
+						$url	= substr_replace( $url , '.min'. substr( $url , -4 ) , strlen( $url ) - 4 , 4 );
+					}
+					else if( strtolower( substr( $url , -3 ) ) === '.js' )
+					{
+						$url	= substr_replace( $url , '.min'. substr( $url , -3 ) , strlen( $url ) - 3 , 3 );
+					}
+				}
+			}
+			
+			return str_replace( $full_blog_url , PageCDN_options('url') , $url );
 		}
 		
 		return $url;
 	}
 	
-	function PageCDN_rewriter_cached_url( $url )
+	
+	function PageCDN_remove_query_string( $url )
 	{
-		static $cache = [] , $includes_json = [];
-		
-		if( !$cache )
-		{
-			@$data	= file_get_contents( PAGECDN_CACHE );
-			
-			if( $data && strlen( $data ) )
-			{
-				$cache	= json_decode( $data , true );
-			}
-		}
-		
-		#	Remove Query String
-		
 		if( strpos( $url , '?' ) !== false )
 		{
 			#	Skip URLs like domain.com/?wf... 
@@ -604,6 +696,41 @@
 			
 			$url	= substr( $url , 0 , strpos( $url , '?' ) );
 		}
+		
+		return $url;
+	}
+	
+	function PageCDN_rewriter_cached_url( $url )
+	{
+		static $cache = array() , $includes_json = array();
+		
+		if( !$cache )
+		{
+			@$data	= file_get_contents( PAGECDN_CACHE );
+			
+			if( $data && strlen( $data ) )
+			{
+				$cache	= json_decode( $data , true );
+			}
+		}
+		
+		#	Remove Query String
+		
+		$url	= PageCDN_remove_query_string( $url );
+		
+		//if( strpos( $url , '?' ) !== false )
+		//{
+		//	#	Skip URLs like domain.com/?wf... 
+		//	
+		//	$path	= parse_url( $url , PHP_URL_PATH );
+		//	
+		//	if( ( $path == '' ) || ( $path == '/' ) )
+		//	{
+		//		return $url;
+		//	}
+		//	
+		//	$url	= substr( $url , 0 , strpos( $url , '?' ) );
+		//}
 		
 		if( ( substr( $url , -4 ) !== '.css' ) && ( substr( $url , -3 ) !== '.js' ) )
 		{
@@ -631,11 +758,9 @@
 		}
 		
 		
-		#	Check if content hash exist in /cache/cache.json
+		#	Check if content hash exist in /data/data.json
 		
 		$contents		= '';
-		
-		//$contents		= file_get_contents( $url );
 		
 		$response		= wp_remote_get( $url );
 		
@@ -660,27 +785,29 @@
 				
 				if( isset( $includes_json[$contents_hash] ) )
 				{
-					$cache[$contents_hash]	= $includes_json[$contents_hash];
+					$cache[$contents_hash]	= 'https://pagecdn.io'.$includes_json[$contents_hash];
 					
-					$cache[$url_hash]		= $includes_json[$contents_hash];
+					$cache[$url_hash]		= 'https://pagecdn.io'.$includes_json[$contents_hash];
 				}
 				else if( !PageCDN_rewriter_exclude_public_lookup( $url ) )
 				{
 					$optimized	= '';
 					
-					if( PageCDN_options( 'min_files' ) )
-					{
-						$optimized	= '&optimized=true';
-					}
+					//if( PageCDN_options( 'min_files' ) )
+					//{
+					//	$optimized	= '&optimized=true';
+					//}
 					
-					$apikey		= PageCDN_default_apikey( );
 					
-					if( PageCDN_options( 'pagecdn_api_key' ) )
-					{
-						$apikey	= PageCDN_options( 'pagecdn_api_key' );
-					}
 					
-					$response	= wp_remote_get( "https://pagecdn.com/api/v2/public/lookup?match=hash&hash={$contents_hash}&apikey={$apikey}{$optimized}" );
+					//$apikey		= PageCDN_default_apikey( );
+					//
+					//if( PageCDN_options( 'pagecdn_api_key' ) )
+					//{
+					//	$apikey	= PageCDN_options( 'pagecdn_api_key' );
+					//}
+					
+					$response	= wp_remote_get( "https://pagecdn.io/lookup/{$contents_hash}" );
 					
 					if( !is_wp_error( $response ) )
 					{
@@ -690,14 +817,30 @@
 						{
 							$response	= $response['response'];
 							
-							if( isset( $response['count'] ) && $response['count'] )
+							if( isset( $response['file_url'] ) && strlen( $response['file_url'] ) )
 							{
-								if( isset( $response['files'][0]['file_url'] ) )
+								$cdn_file	= $response['file_url'];
+								
+								if( PageCDN_options( 'min_files' ) )
 								{
-									$cache[$contents_hash]	= $response['files'][0]['file_url'];
+									//Do not test .min.css and .min.js as we need to support -min.css -min.js
 									
-									$cache[$url_hash]		= $response['files'][0]['file_url'];
+									if( !( ( substr( $cdn_file , -7 ) === 'min.css' ) || ( substr( $cdn_file , -6 ) === 'min.js' ) ) )
+									{
+										if( substr( $cdn_file , -4 ) === '.css' )
+										{
+											$cdn_file	= substr_replace( $cdn_file , '.min.css' , strlen( $cdn_file ) - 4 , 4 );
+										}
+										else if( substr( $cdn_file , -3 ) === '.js' )
+										{
+											$cdn_file	= substr_replace( $cdn_file , '.min.js' , strlen( $cdn_file ) - 3 , 3 );
+										}
+									}
 								}
+								
+								$cache[$contents_hash]	= $cdn_file;
+								
+								$cache[$url_hash]		= $cdn_file;
 							}
 						}
 					}
