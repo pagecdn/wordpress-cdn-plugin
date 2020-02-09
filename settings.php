@@ -192,7 +192,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Optimize Content</h3>
+							<h3 class="hndle">Content Optimizations</h3>
 							<div class="inside">
 								<p>These configuration options help reduce the content size by applying different techniques so that even if the user is on a slow connection, your website still loads faster. All these optimizations are performed at PageCDN servers before the content is delivered, so your server does not need to support these features.</p>
 								
@@ -259,21 +259,11 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Optimize Delivery</h3>
+							<h3 class="hndle">Delivery Optimizations</h3>
 							<div class="inside">
 								
 								<p>Optimizing just the content is not enough in most cases. You need to optimize the content delivery process too. Fortunately, PageCDN has a lot to offer and using an edge network of servers is just one of them.</p>
 								<table class="form-table" style="clear:none;margin-bottom:20px;">
-									
-									<tr valign="top">
-										<td style="padding-bottom:0px;width:30px;"></td>
-										<td style="padding-bottom:0px;">
-											<label for="pagecdn_use_cdn">
-												<input name="pagecdn[use_cdn]" type="checkbox" id="pagecdn_use_cdn" <?=$checked_if_premium?> disabled >
-												Use a Content Delivery Network
-											</label>
-										</td>
-									</tr>
 									
 									<tr valign="top">
 										<td style="padding-bottom:0px;"></td>
@@ -281,6 +271,16 @@
 											<label for="pagecdn_replace_cdns">
 												<input name="pagecdn[replace_cdns]" type="checkbox" id="pagecdn_replace_cdns" value="1" <?php checked(1, PageCDN_options('replace_cdns')) ?> >
 												Reduce DNS lookups - <small style="opacity:0.7;">Uses one public CDN instead of many CDNs that themes or plugins may use</small>
+											</label>
+										</td>
+									</tr>
+									
+									<tr valign="top">
+										<td style="padding-bottom:0px;width:30px;"></td>
+										<td style="padding-bottom:0px;">
+											<label for="pagecdn_use_cdn">
+												<input name="pagecdn[use_cdn]" type="checkbox" id="pagecdn_use_cdn" <?=$checked_if_premium?> disabled >
+												Use a Content Delivery Network
 											</label>
 										</td>
 									</tr>
@@ -349,7 +349,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Optimize Caching</h3>
+							<h3 class="hndle">Cache Optimizations</h3>
 							<div class="inside">
 								
 								<p>Once the resources are delivered to the browser, you have to make sure the resources stay there as long as possible. PageCDN even lets you use resources cached in browser for 3rd party websites. </p>
@@ -368,9 +368,20 @@
 									<tr valign="top">
 										<td style="padding-bottom:0px;"></td>
 										<td style="padding-bottom:0px;">
+											<label for="pagecdn_reuse_libs">
+												<input name="pagecdn[reuse_libs]" type="checkbox" id="pagecdn_reuse_libs" value="1" <?php checked(1, PageCDN_options('reuse_libs')) ?> >
+												Use Public CDN - <small style="opacity:0.7;">Reduces your bandwidth bill and reuses files cached in browser by other websites to speedup your site for first time visitors. PageCDN's <a href="https://pagecdn.com/public-cdn?src=wp-plugin" target="_blank">Public CDN</a> speeds up 100s of open-source libraries, 2,000+ WordPress themes and 10,000+ Plugins.</small>
+											</label>
+										</td>
+									</tr>
+									
+									<tr valign="top">
+										<td style="padding-bottom:0px;"></td>
+										<td style="padding-bottom:0px;">
 											<label for="pagecdn_cache_control">
 												<input name="pagecdn[cache_control]" type="checkbox" id="pagecdn_cache_control" value="1" <?=$disabled_if_not_premium?> <?php checked(1, PageCDN_options('cache_control')) ?> >
-												Set <code>Expires</code> and <code>Cache-Control</code> headers with 
+												Leverage browser caching with 
+												<!-- Set <code>Expires</code> and <code>Cache-Control</code> headers with -->
 											</label>
 											<label for="pagecdn_http_cache_ttl">
 												 <select name="pagecdn[http_cache_ttl]" id="pagecdn_http_cache_ttl">
@@ -384,9 +395,17 @@
 													<option value="-1" <?=$disabled_if_not_premium?> <?php selected('-1', PageCDN_options('http_cache_ttl')) ?> >10+ year expiry (Immutable)</option>
 													
 													<?php if( !in_array( PageCDN_options('http_cache_ttl') , [ 0 , -1 , 2592000 , 15552000 , 31536000 ] ) ) { ?>
-													<option value="<?=PageCDN_options('http_cache_ttl')?>" <?=$disabled_if_not_premium?> selected="selected" >Custom</option>
+													<option value="<?=PageCDN_options('http_cache_ttl')?>" <?=$disabled_if_not_premium?> selected="selected" >Custom expiry</option>
 													<?php } ?>
 												</select>
+												
+												<br />
+												
+												<small style="opacity:0.7;">This sets <code>Expires</code> and <code>Cache-Control</code> HTTP headers for static files to tell the
+													browser to keep a copy of static files for specified period.</small>
+												
+												
+												
 											</label>
 										</td>
 									</tr>
@@ -396,7 +415,7 @@
 										<td style="padding-bottom:0px;">
 											<label for="pagecdn_remove_querystring">
 												<input name="pagecdn[remove_querystring]" type="checkbox" id="pagecdn_remove_querystring" <?=$checked_if_premium?> disabled>
-												Remove query string - <small style="opacity:0.7;">Caching works better with consistent cruftless URLs.</small>
+												Remove query string from static resources - <small style="opacity:0.7;">Caching works better with consistent cruftless URLs.</small>
 											</label>
 										</td>
 									</tr>
@@ -406,17 +425,7 @@
 										<td style="padding-bottom:0px;">
 											<label for="pagecdn_cookie_free_domain">
 												<input name="pagecdn[cookie_free_domain]" type="checkbox" id="pagecdn_cookie_free_domain" <?=$checked_if_premium?> disabled>
-												Use cookie-free domain - <small style="opacity:0.7;">Reduces payload and improves caching.</small>
-											</label>
-										</td>
-									</tr>
-									
-									<tr valign="top">
-										<td style="padding-bottom:0px;"></td>
-										<td style="padding-bottom:0px;">
-											<label for="pagecdn_reuse_libs">
-												<input name="pagecdn[reuse_libs]" type="checkbox" id="pagecdn_reuse_libs" value="1" <?php checked(1, PageCDN_options('reuse_libs')) ?> >
-												Use Public CDN - <small style="opacity:0.7;">Reduces your bandwidth bill and reuses files cached in browser by other websites to speedup your site for first time visitors. PageCDN's <a href="https://pagecdn.com/public-cdn?src=wp-plugin" target="_blank">Public CDN</a> speeds up 100s of open-source libraries, 2,000+ WordPress themes and 10,000+ Plugins.</small>
+												Use cookie-free domain for static resources - <small style="opacity:0.7;">Reduces payload and improves caching.</small>
 											</label>
 										</td>
 									</tr>
@@ -426,7 +435,7 @@
 										<td style="padding-bottom:0px;">
 											<label for="pagecdn_use_https_only">
 												<input name="pagecdn[use_https_only]" type="checkbox" id="pagecdn_use_https_only" <?=$checked_if_premium?> disabled>
-												Use HTTPS-only URLs - <small style="opacity:0.7;">Using HTTP and HTTPS interchangeably for the same resource increases cache misses. PageCDN is on <a href="https://hstspreload.org/" target="_blank">HSTS preload list</a> of all top browsers, which means your files always load over HTTPS whether or not you explicitly ask the browser to do so.</small>
+												Use HTTPS-only URLs for static resources - <small style="opacity:0.7;">Using HTTP and HTTPS interchangeably for the same resource increases cache misses. PageCDN is on <a href="https://hstspreload.org/" target="_blank">HSTS preload list</a> of all top browsers, which means your files always load over HTTPS whether or not you explicitly ask the browser to do so.</small>
 											</label>
 										</td>
 									</tr>
@@ -439,7 +448,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Further Optimization</h3>
+							<h3 class="hndle">Further Optimizations</h3>
 							
 							<div class="inside">
 								

@@ -54,10 +54,10 @@
 			show_message( '<div class="notice notice-error "><p>'. __("<strong>".PAGECDN_FULL_NAME."</strong> plugin works with WordPress ". PAGECDN_MIN_WP .". Please disable the plugin or upgrade your WordPress installation (recommended).", "pagecdn") .'</p></div>' );
 		}
 		
-		if( !PageCDN_private_cdn_enabled( ) )
-		{
-			show_message( '<div class="notice notice-warning is-dismissible"><p>Your website is not fully optimized. Please activate <a href="'.add_query_arg(array('page'=>'pagecdn'),admin_url('options-general.php')).'">Premium CDN</a> to get best performance for your website.</p></div>' );
-		}
+		//if( !PageCDN_private_cdn_enabled( ) )
+		//{
+		//	show_message( '<div class="notice notice-warning is-dismissible"><p>Your website is not fully optimized. Please activate <a href="'.add_query_arg(array('page'=>'pagecdn'),admin_url('options-general.php')).'">Premium CDN</a> to get best performance for your website.</p></div>' );
+		//}
 	}
 	
 	function PageCDN_admin_init( )
@@ -130,7 +130,14 @@
 		#	Purge CDN Cache
 		#	Deleting files internally triggers a purge operation
 		
-		file_put_contents( PAGECDN_CACHE , json_encode( array() ) );
+		$empty_file	= json_encode( array() );
+		
+		file_put_contents( PAGECDN_CACHE , $empty_file );
+		
+		file_put_contents( PAGECDN_IMG_CACHE , $empty_file );
+		
+		file_put_contents( PAGECDN_WEBP_CACHE , $empty_file );
+		
 		
 		$args			= array();
 		
@@ -302,7 +309,7 @@
 	
 	function PageCDN_get_API_response( $endpoint , $args )
 	{
-		$args		= http_build_query( $args );
+		$args		= http_build_query( array_merge( $args , PageCDN_integration_info( ) ) );
 		
 		$response	= wp_remote_get( "https://pagecdn.com/api/v2{$endpoint}?{$args}" , array( 'timeout' => 30 ) );
 		
@@ -334,6 +341,8 @@
 	
 	function PageCDN_post_API_response( $endpoint , $data )
 	{
+		$data		= array_merge( $data , PageCDN_integration_info( ) );
+		
 		$response	= wp_remote_post( "https://pagecdn.com/api/v2{$endpoint}" , array( 'timeout' => 20 , 'body' => $data ) );
 		
 		if( is_wp_error( $response ) )
@@ -402,6 +411,19 @@
 		$options = PageCDN_options();
 		
 		require PAGECDN_DIR . '/settings.php';
+	}
+	
+	
+	function PageCDN_integration_info( )
+	{
+		Global $wp_version;
+		
+		$tool['integration_name']			= 'easy-speedup';
+		$tool['integration_version']		= PAGECDN_VER;
+		$tool['integration_cms_name']		= 'wordpress';
+		$tool['integration_cms_version']	= $wp_version;
+		
+		return $tool;
 	}
 	
 	
