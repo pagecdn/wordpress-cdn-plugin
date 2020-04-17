@@ -130,13 +130,22 @@
 		#	Purge CDN Cache
 		#	Deleting files internally triggers a purge operation
 		
-		$empty_file	= json_encode( array() );
 		
-		file_put_contents( PAGECDN_CACHE , $empty_file );
 		
-		file_put_contents( PAGECDN_IMG_CACHE , $empty_file );
+		update_option( 'pagecdn-cache' , array( ) );
 		
-		file_put_contents( PAGECDN_WEBP_CACHE , $empty_file );
+		update_option( 'pagecdn-image-cache' , array( ) );
+		
+		update_option( 'pagecdn-webp-cache' , array( ) );
+		
+		
+		//$empty_file	= json_encode( array() );
+		//
+		//file_put_contents( PAGECDN_CACHE , $empty_file );
+		//
+		//file_put_contents( PAGECDN_IMG_CACHE , $empty_file );
+		//
+		//file_put_contents( PAGECDN_WEBP_CACHE , $empty_file );
 		
 		
 		$args			= array();

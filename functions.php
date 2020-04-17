@@ -104,11 +104,18 @@
 		
 		if( $PageCDN_discovered_new_URLs )
 		{
-			@file_put_contents( PAGECDN_CACHE , json_encode( $PageCDN_known_URLs ) );
+			update_option( 'pagecdn-cache' , $PageCDN_known_URLs );
 			
-			@file_put_contents( PAGECDN_IMG_CACHE , json_encode( $PageCDN_known_img_URLs ) );
+			update_option( 'pagecdn-image-cache' , $PageCDN_known_img_URLs );
 			
-			@file_put_contents( PAGECDN_WEBP_CACHE , json_encode( $PageCDN_known_webp_URLs ) );
+			update_option( 'pagecdn-webp-cache' , $PageCDN_known_webp_URLs );
+			
+			
+			//@file_put_contents( PAGECDN_CACHE , json_encode( $PageCDN_known_URLs ) );
+			//
+			//@file_put_contents( PAGECDN_IMG_CACHE , json_encode( $PageCDN_known_img_URLs ) );
+			//
+			//@file_put_contents( PAGECDN_WEBP_CACHE , json_encode( $PageCDN_known_webp_URLs ) );
 		}
 	}
 	
@@ -503,7 +510,7 @@
 				$optimized	= '';
 				
 				$response	= wp_remote_get( "https://pagecdn.io/lookup/{$contents_hash}" );
-				
+				//echo $url;die;
 				if( !is_wp_error( $response ) )
 				{
 					$response	= json_decode( $response['body'] , true );
@@ -544,7 +551,9 @@
 				else
 				{
 					#	DO NOT add to $known_URL[]
-					return PageCDN_remove_query_string( $url );
+					
+					#	Commented off, due to several websites repeatedly requesting the same /lookup/ endpoint
+					//return PageCDN_remove_query_string( $url );
 				}
 			}
 		}
