@@ -6,7 +6,7 @@
 	Author: PageCDN
 	Author URI: https://pagecdn.com
 	License: GPLv2 or later
-	Version: 5.2
+	Version: 5.4
 */
 	
 	defined( 'ABSPATH' ) OR exit;
@@ -19,7 +19,7 @@
 	//define( 'PAGECDN_CACHE'			, WP_CONTENT_DIR . '/cache/pagecdn/cache.json'	);
 	//define( 'PAGECDN_IMG_CACHE'		, WP_CONTENT_DIR . '/cache/pagecdn/images.json'	);
 	//define( 'PAGECDN_WEBP_CACHE'	, WP_CONTENT_DIR . '/cache/pagecdn/webp.json'	);
-	define( 'PAGECDN_VER'			, '5.2'											);
+	define( 'PAGECDN_VER'			, '5.4'											);
 	
 	$PageCDN_origin_scheme		= strtolower( parse_url( home_url( ) , PHP_URL_SCHEME ) );
 	$PageCDN_origin_host		= parse_url( home_url( ) , PHP_URL_HOST );

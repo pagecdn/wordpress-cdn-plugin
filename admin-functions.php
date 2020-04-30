@@ -37,11 +37,13 @@
 		
 		if( PageCDN_private_cdn_enabled( ) )
 		{
-			return array_merge( array( "<a href=\"{$settings_url}\">{$settings_text}</a>" , "<span style=\"color:green;\" class=\"dashicons-before dashicons-yes\">Optimized</span>" ) , $data );
+			return array_merge( array( "<a href=\"{$settings_url}\">{$settings_text}</a>" , "<span style=\"color:green;\" class=\"dashicons-before dashicons-yes\">Premium</span>" ) , $data );
 		}
 		else
 		{
-			return array_merge( array( "<a href=\"{$settings_url}\">{$settings_text}</a>" , "<a href=\"https://pagecdn.com/signup\" target=\"_blank\" style=\"color:green;\">Optimize</a>" ) , $data );
+			//return array_merge( array( "<a href=\"{$settings_url}\">{$settings_text}</a>" , "<a href=\"https://pagecdn.com/signup\" target=\"_blank\" style=\"color:green;\">Optimize</a>" ) , $data );
+			
+			return array_merge( array( "<a href=\"{$settings_url}\">{$settings_text}</a>" ) , $data );
 		}
 	}
 	

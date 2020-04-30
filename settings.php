@@ -75,10 +75,12 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Premium CDN <?php if( !PageCDN_private_cdn_enabled( ) ) { ?>( Disabled )<?php } ?></h3>
+							<h3 class="hndle">Premium CDN <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#ff0024;" class="dashicons-before dashicons-no-alt">Disabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled</span><?php } ?></h3>
 							<div class="inside">
 								
+								<?php if( !PageCDN_private_cdn_enabled( ) ) { ?>
 								<p>While Public CDN is free for open-source content on your website, Premium CDN optimizes and supercharges delivery of all your website resources. Setting up Premium CDN is really easy. <a href="https://pagecdn.com/signup" target="_blank">Create an account</a> and copy the API Key from <a href="https://pagecdn.com/account/settings" target="_blank">CDN Settings</a> to the below box and hit 'Save Changes'. Plugin will do the initial setup for you.</p>
+								<?php } ?>
 								
 								<table class="form-table" style="clear:none;">
 									
@@ -192,7 +194,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Content Optimizations</h3>
+							<h3 class="hndle">Content Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Available (Configure Below)</span><?php } ?></h3>
 							<div class="inside">
 								<p>These configuration options help reduce the content size by applying different techniques so that even if the user is on a slow connection, your website still loads faster. All these optimizations are performed at PageCDN servers before the content is delivered, so your server does not need to support these features.</p>
 								
@@ -259,7 +261,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Delivery Optimizations</h3>
+							<h3 class="hndle">Delivery Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Available (Configure Below)</span><?php } ?></h3>
 							<div class="inside">
 								
 								<p>Optimizing just the content is not enough in most cases. You need to optimize the content delivery process too. Fortunately, PageCDN has a lot to offer and using an edge network of servers is just one of them.</p>
@@ -349,7 +351,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Cache Optimizations</h3>
+							<h3 class="hndle">Cache Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Available (Configure Below)</span><?php } ?></h3>
 							<div class="inside">
 								
 								<p>Once the resources are delivered to the browser, you have to make sure the resources stay there as long as possible. PageCDN even lets you use resources cached in browser for 3rd party websites. </p>
