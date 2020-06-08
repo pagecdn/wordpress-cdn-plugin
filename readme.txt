@@ -16,7 +16,7 @@ Speed up website by upto 10X in just few clicks. CDN, cache, compression, minify
 
 == Description ==
 
-Easy Speedup will speed up your wordpress website by up to 10x and is 10x easier to set up. You will need little technical know-how to get maximum website speed with this incredibly sophisticated yet easy to install plugin.
+PageCDN's Easy Speedup Plugin will speed up your wordpress website by up to 10x and is 10x easier to set up. You will need little technical know-how to get maximum website speed with this incredibly sophisticated yet easy to install plugin.
 
 == Free CDN ==
 
