@@ -15,12 +15,12 @@
 					
 					<div class="postbox">
 						
-						<h3 class="hndle">Setup Guide</h3>
+						<h3 class="hndle">Quick Start</h3>
 						<div class="inside">
 							<ul>
+								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/pricing?r=easy-speedup">Pricing</a></li>
 								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/docs/quick-start#wordpress-integration">Setup Guide</a></li>
-								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/docs/quick-start#optimizing-caching-performance">Optimize caching &amp; performance</a></li>
-								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/docs/quick-start#working-with-easy-fonts">Using Easy Fonts</a></li>
+								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/optimizations">Optimizations</a></li>
 							</ul>
 						</div>
 						
@@ -34,8 +34,9 @@
 							<p>PageCDN uses many advanced techniques to optimize, deliver and caching the content to make your website extremely fast.</p>
 							<ul>
 								<li> →&nbsp; Immutable Caching</li>
-								<li> →&nbsp; Brotli-11 Compression</li>
+								<li> →&nbsp; Brotli:11 Compression</li>
 								<li> →&nbsp; On-the-fly image optimization</li>
+								<li> →&nbsp; WebP Conversion</li>
 								<li> →&nbsp; On-the-fly CSS/JS minification</li>
 								
 								<li> →&nbsp; Cache Re-use Across Sites</li>
@@ -75,11 +76,12 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Premium CDN <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#ff0024;" class="dashicons-before dashicons-no-alt">Disabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled</span><?php } ?></h3>
+							<h3 class="hndle">Premium CDN <?php if( !PageCDN_private_cdn_enabled( ) ) { ?>[ <a style="font-size:13px;font-weight:600;color:#944ABB;" href="https://pagecdn.com/pricing?r=easy-speedup" target="_blank">Click here to Enable</a> ]<?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled</span><?php } ?></h3>
 							<div class="inside">
 								
 								<?php if( !PageCDN_private_cdn_enabled( ) ) { ?>
-								<p>While Public CDN is free for open-source content on your website, Premium CDN optimizes and supercharges delivery of all your website resources. Setting up Premium CDN is really easy. <a href="https://pagecdn.com/signup" target="_blank">Create an account</a> and copy the API Key from <a href="https://pagecdn.com/account/settings" target="_blank">CDN Settings</a> to the below box and hit 'Save Changes'. Plugin will do the initial setup for you.</p>
+								<!-- <p>While Public CDN is free for open-source content on your website, Premium CDN optimizes and supercharges delivery of all your website resources. Setting up Premium CDN is really easy. <a href="https://pagecdn.com/signup" target="_blank">Create an account</a> and copy the API Key from <a href="https://pagecdn.com/account/settings" target="_blank">CDN Settings</a> to the below box and hit 'Save Changes'. Plugin will do the initial setup for you.</p> -->
+								<p>Enable Premium CDN to <b>go beyond free features</b> and perform very aggressive cloud based optimizations on your site. Setup is easy. Just <a href="https://pagecdn.com/pricing?r=easy-speedup" target="_blank">activate your subscription</a> and copy the API Key from <a href="https://pagecdn.com/account/settings" target="_blank">CDN Settings</a> to the below box.</p>
 								<?php } ?>
 								
 								<table class="form-table" style="clear:none;">
@@ -172,7 +174,7 @@
 										<td style="padding-top:0px;"></td>
 										<td style="padding-top:0px;">
 											<p><small>
-												<a href="https://pagecdn.com/account/settings/integration" target="_blank">Get API Key</a> to enable advanced optimizations.
+												Get API Key to enable advanced optimizations. <a href="https://pagecdn.com/pricing?r=easy-speedup" target="_blank">See plans</a>.
 											</small></p>
 										</td>
 									</tr>
@@ -194,7 +196,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Content Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Available (Configure Below)</span><?php } ?></h3>
+							<h3 class="hndle">Content Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled (Configure Below)</span><?php } ?></h3>
 							<div class="inside">
 								<p>These configuration options help reduce the content size by applying different techniques so that even if the user is on a slow connection, your website still loads faster. All these optimizations are performed at PageCDN servers before the content is delivered, so your server does not need to support these features.</p>
 								
@@ -261,7 +263,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Delivery Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Available (Configure Below)</span><?php } ?></h3>
+							<h3 class="hndle">Delivery Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled (Configure Below)</span><?php } ?></h3>
 							<div class="inside">
 								
 								<p>Optimizing just the content is not enough in most cases. You need to optimize the content delivery process too. Fortunately, PageCDN has a lot to offer and using an edge network of servers is just one of them.</p>
@@ -335,7 +337,7 @@
 										<td style="padding-bottom:0px;">
 											<label for="pagecdn_update_css_paths">
 												<input name="pagecdn[update_css_paths]" type="checkbox" id="pagecdn_update_css_paths" value="1" <?php checked(1, PageCDN_options('update_css_paths')) ?> >
-												Fix URLs in CSS files - <small style="opacity:0.7;">Enable this to fix missing CSS background images, or broken CSS imports.</small>
+												Rewrite URLs in CSS files - <small style="opacity:0.7;">Enable this to fix missing CSS background images, or broken CSS imports.</small>
 											</label>
 										</td>
 									</tr>
@@ -351,7 +353,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Cache Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Available (Configure Below)</span><?php } ?></h3>
+							<h3 class="hndle">Cache Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled (Configure Below)</span><?php } ?></h3>
 							<div class="inside">
 								
 								<p>Once the resources are delivered to the browser, you have to make sure the resources stay there as long as possible. PageCDN even lets you use resources cached in browser for 3rd party websites. </p>

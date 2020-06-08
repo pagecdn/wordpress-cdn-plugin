@@ -134,11 +134,8 @@
 		
 		
 		
-		update_option( 'pagecdn-cache' , array( ) );
+		PageCDN_purge_local( );
 		
-		update_option( 'pagecdn-image-cache' , array( ) );
-		
-		update_option( 'pagecdn-webp-cache' , array( ) );
 		
 		
 		//$empty_file	= json_encode( array() );
@@ -168,6 +165,15 @@
 				}
 			}
 		}
+	}
+	
+	function PageCDN_purge_local( )
+	{
+		update_option( 'pagecdn-cache' , json_encode( array( ) ) );
+		
+		update_option( 'pagecdn-image-cache' , json_encode( array( ) ) );
+		
+		update_option( 'pagecdn-webp-cache' , json_encode( array( ) ) );
 	}
 	
 	
@@ -204,11 +210,12 @@
 		
 		if( ( $data['url'] == '' ) && strlen( $data['pagecdn_api_key'] ) )
 		{
-			$post					= array();
-			$post['apikey']			= $data['pagecdn_api_key'];
-			$post['repo_name']		= get_bloginfo( 'name' );
-			$post['origin_url']		= home_url();
-			$post['privacy']		= 'private';
+			$post						= array();
+			$post['apikey']				= $data['pagecdn_api_key'];
+			$post['repo_name']			= get_bloginfo( 'name' );
+			$post['origin_url']			= home_url();
+			$post['privacy']			= 'private';
+			$post['update_css_paths']	= '1';
 			
 			if( $response = PageCDN_post_API_response( '/private/repo/create' , $post ) )
 			{
@@ -225,6 +232,8 @@
 					$data['url']	= $response['cdn_base'];
 					
 					$repo_created	= true;
+					
+					PageCDN_purge_local( );
 				}
 			}
 			else
@@ -243,6 +252,11 @@
 			$data['url']				= '';
 			$data['optimize_images']	= 0;
 			$data['min_files']			= 0;
+			
+			#	Purge local cache to take effect of the change
+			
+			PageCDN_purge_local( );
+			
 		}
 		
 		

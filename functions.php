@@ -104,11 +104,11 @@
 		
 		if( $PageCDN_discovered_new_URLs )
 		{
-			update_option( 'pagecdn-cache' , $PageCDN_known_URLs );
+			update_option( 'pagecdn-cache' , json_encode( $PageCDN_known_URLs ) );
 			
-			update_option( 'pagecdn-image-cache' , $PageCDN_known_img_URLs );
+			update_option( 'pagecdn-image-cache' , json_encode( $PageCDN_known_img_URLs ) );
 			
-			update_option( 'pagecdn-webp-cache' , $PageCDN_known_webp_URLs );
+			update_option( 'pagecdn-webp-cache' , json_encode( $PageCDN_known_webp_URLs ) );
 			
 			
 			//@file_put_contents( PAGECDN_CACHE , json_encode( $PageCDN_known_URLs ) );
@@ -137,12 +137,19 @@
 			
 			$path	= parse_url( $url , PHP_URL_PATH );
 			
+			$fragment	= parse_url( $url , PHP_URL_FRAGMENT );
+			
 			if( ( $path == '' ) || ( $path == '/' ) )
 			{
 				return $url;
 			}
 			
 			$url	= substr( $url , 0 , strpos( $url , '?' ) );
+			
+			if( $fragment && !strpos( $url , '#' ) )
+			{
+				$url	= $url . '#' . $fragment;
+			}
 		}
 		
 		return $url;
@@ -178,7 +185,8 @@
 		Global $PageCDN_webp_support;
 		
 		#	Replace known URLs.
-		$html	= strtr( $html , $PageCDN_known_URLs );
+		#	Replacing URLs here cause longer URLs to be partially replaced by shorter URLs (with querystrings)
+		//$html	= strtr( $html , $PageCDN_known_URLs );
 		
 		if( $PageCDN_webp_support )
 		{
@@ -189,6 +197,7 @@
 			$html	= strtr( $html , $PageCDN_known_img_URLs );
 		}
 		
+		//return json_encode( $PageCDN_known_URLs ,  JSON_PRETTY_PRINT );
 		
 		#	Discover new URLs.
 		
@@ -268,10 +277,10 @@
 		
 		$original_url	= $url;
 		
-		//if( isset( $PageCDN_known_URLs[$original_url] ) )
-		//{
-		//	return $PageCDN_known_URLs[$original_url];
-		//}
+		if( isset( $PageCDN_known_URLs[$original_url] ) )
+		{
+			return $PageCDN_known_URLs[$original_url];
+		}
 		
 		#	file_put_contents( PAGECDN_DIR . '/cache/test.txt' , $url . "\n\n" , FILE_APPEND );
 		
@@ -453,64 +462,99 @@
 		
 		static  $includes_json = array();
 		
-		if( !$includes_json )
-		{
-			@$data	= file_get_contents( PAGECDN_DIR . '/data/data.json' );
-			
-			if( $data && strlen( $data ) )
-			{
-				$includes_json	= json_decode( $data , true );
-			}
-		}
-		
 		$original_url	= $url;
 		
 		
-		//QS removal is required here before testing css and js extension
+		//This is redundent, but we need it here to make sure that a URL is stored without changing host to CDN host 
+		//does not get a chance to generate lookup request on every page load.
 		
-		$test_url	= PageCDN_remove_query_string( $url );
-		
-		if( ( strtolower( substr( $test_url , -4 ) ) !== '.css' ) && ( strtolower( substr( $test_url , -3 ) ) !== '.js' ) )
+		if( isset( $PageCDN_known_URLs[$original_url] ) )
 		{
-			return $test_url;
+			return $PageCDN_known_URLs[$original_url];
 		}
 		
-		if( strpos( $url , '//' ) === 0 )
+		if( !PageCDN_rewriter_exclude_public_lookup( $url ) )
 		{
-			$url	= substr( home_url( ) , 0 , strpos( home_url( ) , ':' ) ) . ':' . $url;
-		}
-		
-		if( strpos( $url , '//' ) === false )
-		{
-			$url	= home_url( ) . $url;
-		}
-		
-		#	Check if content hash exist in data file.
-		
-		$contents		= '';
-		
-		$response		= wp_remote_get( $url );
-		
-		if( is_array( $response ) )
-		{
-			$contents	= $response['body'];
-			
-			$contents_hash	= hash( 'sha256' , $contents );
-			
-			if( isset( $includes_json[$contents_hash] ) )
+			if( !$includes_json )
 			{
-				$PageCDN_discovered_new_URLs		= true;
+				@$data	= file_get_contents( PAGECDN_DIR . '/data/data.json' );
 				
-				$PageCDN_known_URLs[$original_url]	= 'https://pagecdn.io'.$includes_json[$contents_hash];
-				
-				return $PageCDN_known_URLs[$original_url];
+				if( $data && strlen( $data ) )
+				{
+					$includes_json	= json_decode( $data , true );
+				}
 			}
-			else if( !PageCDN_rewriter_exclude_public_lookup( $url ) )
+			
+			//QS removal is required here before testing css and js extension
+			
+			$test_url	= PageCDN_remove_query_string( $url );
+			
+			if( ( strtolower( substr( $test_url , -4 ) ) !== '.css' ) && ( strtolower( substr( $test_url , -3 ) ) !== '.js' ) )
 			{
+				return $test_url;
+			}
+			
+			if( strpos( $url , '//' ) === 0 )
+			{
+				$url	= substr( home_url( ) , 0 , strpos( home_url( ) , ':' ) ) . ':' . $url;
+			}
+			
+			if( strpos( $url , '//' ) === false )
+			{
+				$url	= home_url( ) . $url;
+			}
+			
+			#	Check if content hash exist in data file.
+			
+			$contents		= '';
+			
+			if( strpos( $url , home_url( ) ) === 0 )
+			{
+				$parsed_url		= wp_parse_url( $url );
+				
+				$file       	= rtrim( ABSPATH, '/' ) . $parsed_url['path'];
+				
+				if( is_file( $file ) )
+				{
+					$contents	= file_get_contents( $file );
+				}
+				else
+				{
+					$file_alt   	= rtrim( dirname( ABSPATH ), '/' ) . $parsed_url['path'];
+					
+					if( is_file( $file_alt ) )
+					{
+						$contents	= file_get_contents( $file_alt );
+					}
+				}
+			}
+			else
+			{
+				$response	= wp_remote_get( $url );
+				
+				if( is_array( $response ) )
+				{
+					$contents	= $response['body'];
+				}
+			}
+			
+			if( strlen( $contents ) )
+			{
+				$contents_hash	= hash( 'sha256' , $contents );
+				
+				if( isset( $includes_json[$contents_hash] ) )
+				{
+					$PageCDN_discovered_new_URLs		= true;
+					
+					$PageCDN_known_URLs[$original_url]	= 'https://pagecdn.io'.$includes_json[$contents_hash];
+					
+					return $PageCDN_known_URLs[$original_url];
+				}
+				
 				$optimized	= '';
 				
 				$response	= wp_remote_get( "https://pagecdn.io/lookup/{$contents_hash}" );
-				//echo $url;die;
+				
 				if( !is_wp_error( $response ) )
 				{
 					$response	= json_decode( $response['body'] , true );
@@ -548,15 +592,11 @@
 						}
 					}
 				}
-				else
-				{
-					#	DO NOT add to $known_URL[]
-					
-					#	Commented off, due to several websites repeatedly requesting the same /lookup/ endpoint
-					//return PageCDN_remove_query_string( $url );
-				}
 			}
 		}
+		
+		//return PageCDN_remove_query_string( $url );
+		
 		
 		$PageCDN_discovered_new_URLs		= true;
 		

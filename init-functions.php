@@ -6,6 +6,7 @@
 		#	add_filter( 'the_content' , array( 'PageCDN' , 'rewrite_the_content' ) , 100 );
 		
 		add_action( 'wp_head'								, 'PageCDN_preconnect'			, 0		);
+		add_action( 'wp_head'								, 'PageCDN_generator'			, 10	);
 		
 		if( !PageCDN_is_backend( ) )
 		{
@@ -22,6 +23,9 @@
 		add_action( 'all_admin_notices'						, 'PageCDN_compat_check'				);
 		add_action( 'admin_bar_menu'						, 'PageCDN_admin_links'			, 150	);
 		add_action( 'admin_notices'							, 'PageCDN_purge'						);
+		
+		
+		
 		
 		register_activation_hook( PAGECDN_FILE , 'PageCDN_activation' );
 		register_uninstall_hook( PAGECDN_FILE , 'PageCDN_uninstall' );
@@ -113,6 +117,11 @@
 			
 			echo "\n";
 		}
+	}
+	
+	function PageCDN_generator( )
+	{
+		echo "\n".'<meta name="generator" content="Easy Speedup '. PAGECDN_VER .'"/>'."\n";
 	}
 	
 	function PageCDN_uninstall( )
