@@ -19,6 +19,8 @@
 		if( $excludes === null )
 		{
 			$excludes	= array_filter( array_map( 'trim' , explode( ',' , PageCDN_options( 'excludes' ) ) ) );
+			
+			$excludes[]	= '/wp-content/uploads/gravity_forms/captcha-';
 		}
 		
 		foreach( $excludes as $exclude )
@@ -35,6 +37,21 @@
 	function PageCDN_rewriter_exclude_public_lookup( $asset )
 	{
 		$excludes	= array( '/wp-content/cache/' , '/min/' );
+		
+		foreach( $excludes as $exclude )
+		{
+			if( stripos( $asset , $exclude ) !== false )
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	function PageCDN_rewriter_exclude_image_optimization( $asset )
+	{
+		$excludes	= array(  );
 		
 		foreach( $excludes as $exclude )
 		{
@@ -104,11 +121,11 @@
 		
 		if( $PageCDN_discovered_new_URLs )
 		{
-			update_option( 'pagecdn-cache' , json_encode( $PageCDN_known_URLs ) );
+			update_option( 'pagecdn-cache' , json_encode( $PageCDN_known_URLs ) , $autoload = false );
 			
-			update_option( 'pagecdn-image-cache' , json_encode( $PageCDN_known_img_URLs ) );
+			update_option( 'pagecdn-image-cache' , json_encode( $PageCDN_known_img_URLs ) , $autoload = false );
 			
-			update_option( 'pagecdn-webp-cache' , json_encode( $PageCDN_known_webp_URLs ) );
+			update_option( 'pagecdn-webp-cache' , json_encode( $PageCDN_known_webp_URLs ) , $autoload = false );
 			
 			
 			//@file_put_contents( PAGECDN_CACHE , json_encode( $PageCDN_known_URLs ) );
@@ -188,14 +205,14 @@
 		#	Replacing URLs here cause longer URLs to be partially replaced by shorter URLs (with querystrings)
 		//$html	= strtr( $html , $PageCDN_known_URLs );
 		
-		if( $PageCDN_webp_support )
-		{
-			$html	= strtr( $html , $PageCDN_known_webp_URLs );
-		}
-		else
-		{
-			$html	= strtr( $html , $PageCDN_known_img_URLs );
-		}
+		//if( $PageCDN_webp_support )
+		//{
+		//	$html	= strtr( $html , $PageCDN_known_webp_URLs );
+		//}
+		//else
+		//{
+		//	$html	= strtr( $html , $PageCDN_known_img_URLs );
+		//}
 		
 		//return json_encode( $PageCDN_known_URLs ,  JSON_PRETTY_PRINT );
 		
@@ -350,7 +367,7 @@
 				}
 			}
 			
-			if( PageCDN_options('optimize_images') )
+			if( PageCDN_options('optimize_images') && !PageCDN_rewriter_exclude_image_optimization( $url ) )
 			{
 				$flag	= '._o';
 				
@@ -430,23 +447,28 @@
 			#	Cache here in private cdn section to make sure errors occured in public cdn 
 			#	section do not get cached as such cache was skipped in public cdn too for errors.
 			
-			$PageCDN_discovered_new_URLs		= true;
+			
+			//$PageCDN_discovered_new_URLs		= true;
 			
 			if( $optimizable_image )
 			{
-				if( $PageCDN_webp_support )
-				{
-					$PageCDN_known_webp_URLs[$original_url]	= $url;
-					
-					return $PageCDN_known_webp_URLs[$original_url];
-				}
-				else
-				{
-					$PageCDN_known_img_URLs[$original_url]	= $url;
-					
-					return $PageCDN_known_img_URLs[$original_url];
-				}
+				return $url;
+				
+				//if( $PageCDN_webp_support )
+				//{
+				//	$PageCDN_known_webp_URLs[$original_url]	= $url;
+				//	
+				//	return $PageCDN_known_webp_URLs[$original_url];
+				//}
+				//else
+				//{
+				//	$PageCDN_known_img_URLs[$original_url]	= $url;
+				//	
+				//	return $PageCDN_known_img_URLs[$original_url];
+				//}
 			}
+			
+			$PageCDN_discovered_new_URLs		= true;
 			
 			$PageCDN_known_URLs[$original_url]	= $url;
 			

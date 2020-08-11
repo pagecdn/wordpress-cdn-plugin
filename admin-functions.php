@@ -169,11 +169,11 @@
 	
 	function PageCDN_purge_local( )
 	{
-		update_option( 'pagecdn-cache' , json_encode( array( ) ) );
+		update_option( 'pagecdn-cache' , json_encode( array( ) ) , $autoload = false );
 		
-		update_option( 'pagecdn-image-cache' , json_encode( array( ) ) );
+		update_option( 'pagecdn-image-cache' , json_encode( array( ) ) , $autoload = false );
 		
-		update_option( 'pagecdn-webp-cache' , json_encode( array( ) ) );
+		update_option( 'pagecdn-webp-cache' , json_encode( array( ) ) , $autoload = false );
 	}
 	
 	

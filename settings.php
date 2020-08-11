@@ -18,9 +18,9 @@
 						<h3 class="hndle">Quick Start</h3>
 						<div class="inside">
 							<ul>
-								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/pricing?r=easy-speedup">Pricing</a></li>
-								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/docs/quick-start#wordpress-integration">Setup Guide</a></li>
-								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/optimizations">Optimizations</a></li>
+								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/pricing?src=easy-speedup">Pricing</a></li>
+								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/docs/quick-start?src=easy-speedup#wordpress-integration">Setup Guide</a></li>
+								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/optimizations?src=easy-speedup">Optimizations</a></li>
 							</ul>
 						</div>
 						
@@ -56,14 +56,14 @@
 						<div class="inside">
 							<p>If you are a web developer or opensource contributor, there is more you can do with PageCDN.</p>
 							<ul>
-								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/non-profits">Free for open-source sites</a></li>
-								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/free-cdn">Freelancers / Bloggers</a></li>
-								<!-- <li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/reselling">Resell PageCDN</a></li> -->
-								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/suggestions">Suggest open-source library</a></li>
-								<!-- <li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/contacting-us">Submit an integration</a></li> -->
-								<!-- <li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/contacting-us">Commercial content</a></li> -->
+								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/non-profits?src=easy-speedup">Free for open-source sites</a></li>
+								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/free-cdn?src=easy-speedup">Freelancers / Bloggers</a></li>
+								<!-- <li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/reselling?src=easy-speedup">Resell PageCDN</a></li> -->
+								<li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/suggestions?src=easy-speedup">Suggest open-source library</a></li>
+								<!-- <li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/contacting-us?src=easy-speedup">Submit an integration</a></li> -->
+								<!-- <li> →&nbsp; <a target="_blank" href="https://pagecdn.com/about/contacting-us?src=easy-speedup">Commercial content</a></li> -->
 							</ul>
-							<p>Please feel free to <a target="_blank" href="https://pagecdn.com/about/contacting-us">contact us</a> with any questions, suggestions or bugs.</p>
+							<p>Please feel free to <a target="_blank" href="https://pagecdn.com/about/contacting-us?src=easy-speedup">contact us</a> with any questions, suggestions or bugs.</p>
 						</div>
 						
 					</div>
@@ -76,12 +76,12 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Premium CDN <?php if( !PageCDN_private_cdn_enabled( ) ) { ?>[ <a style="font-size:13px;font-weight:600;color:#944ABB;" href="https://pagecdn.com/pricing?r=easy-speedup" target="_blank">Click here to Enable</a> ]<?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled</span><?php } ?></h3>
+							<h3 class="hndle">Premium CDN <?php if( !PageCDN_private_cdn_enabled( ) ) { ?>[ <a style="font-size:13px;font-weight:600;color:#944ABB;" href="https://pagecdn.com/pricing?src=easy-speedup" target="_blank">Click here to Enable</a> ]<?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled</span><?php } ?></h3>
 							<div class="inside">
 								
 								<?php if( !PageCDN_private_cdn_enabled( ) ) { ?>
 								<!-- <p>While Public CDN is free for open-source content on your website, Premium CDN optimizes and supercharges delivery of all your website resources. Setting up Premium CDN is really easy. <a href="https://pagecdn.com/signup" target="_blank">Create an account</a> and copy the API Key from <a href="https://pagecdn.com/account/settings" target="_blank">CDN Settings</a> to the below box and hit 'Save Changes'. Plugin will do the initial setup for you.</p> -->
-								<p>Enable Premium CDN to <b>go beyond free features</b> and perform very aggressive cloud based optimizations on your site. Setup is easy. Just <a href="https://pagecdn.com/pricing?r=easy-speedup" target="_blank">activate your subscription</a> and copy the API Key from <a href="https://pagecdn.com/account/settings" target="_blank">CDN Settings</a> to the below box.</p>
+								<p>Enable Premium CDN to <b>go beyond free features</b> and perform very aggressive cloud based optimizations on your site. Setup is easy. Just <a href="https://pagecdn.com/pricing?src=easy-speedup" target="_blank">activate your subscription</a> and copy the API Key from <a href="https://pagecdn.com/account/settings?src=easy-speedup" target="_blank">CDN Settings</a> to the below box.</p>
 								<?php } ?>
 								
 								<table class="form-table" style="clear:none;">
@@ -174,7 +174,7 @@
 										<td style="padding-top:0px;"></td>
 										<td style="padding-top:0px;">
 											<p><small>
-												Get API Key to enable advanced optimizations. <a href="https://pagecdn.com/pricing?r=easy-speedup" target="_blank">See plans</a>.
+												Get API Key to enable advanced optimizations. <a href="https://pagecdn.com/pricing?src=easy-speedup" target="_blank">See plans</a>.
 											</small></p>
 										</td>
 									</tr>
@@ -196,7 +196,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Content Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled (Configure Below)</span><?php } ?></h3>
+							<h3 class="hndle">Content Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Free CDN Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled (Configure Below)</span><?php } ?></h3>
 							<div class="inside">
 								<p>These configuration options help reduce the content size by applying different techniques so that even if the user is on a slow connection, your website still loads faster. All these optimizations are performed at PageCDN servers before the content is delivered, so your server does not need to support these features.</p>
 								
@@ -263,7 +263,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Delivery Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled (Configure Below)</span><?php } ?></h3>
+							<h3 class="hndle">Delivery Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Free CDN Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled (Configure Below)</span><?php } ?></h3>
 							<div class="inside">
 								
 								<p>Optimizing just the content is not enough in most cases. You need to optimize the content delivery process too. Fortunately, PageCDN has a lot to offer and using an edge network of servers is just one of them.</p>
@@ -353,7 +353,7 @@
 						
 						<div class="postbox">
 							
-							<h3 class="hndle">Cache Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Partially Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled (Configure Below)</span><?php } ?></h3>
+							<h3 class="hndle">Cache Optimizations &nbsp; <?php if( !PageCDN_private_cdn_enabled( ) ) { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-warning">Free CDN Enabled</span><?php } else { ?><span style="color:#3aa82a;" class="dashicons-before dashicons-yes">Enabled (Configure Below)</span><?php } ?></h3>
 							<div class="inside">
 								
 								<p>Once the resources are delivered to the browser, you have to make sure the resources stay there as long as possible. PageCDN even lets you use resources cached in browser for 3rd party websites. </p>
@@ -374,7 +374,7 @@
 										<td style="padding-bottom:0px;">
 											<label for="pagecdn_reuse_libs">
 												<input name="pagecdn[reuse_libs]" type="checkbox" id="pagecdn_reuse_libs" value="1" <?php checked(1, PageCDN_options('reuse_libs')) ?> >
-												Use Public CDN - <small style="opacity:0.7;">Reduces your bandwidth bill and reuses files cached in browser by other websites to speedup your site for first time visitors. PageCDN's <a href="https://pagecdn.com/public-cdn?src=wp-plugin" target="_blank">Public CDN</a> speeds up 100s of open-source libraries, 2,000+ WordPress themes and 10,000+ Plugins.</small>
+												Use Public CDN - <small style="opacity:0.7;">Reduces your bandwidth bill and reuses files cached in browser by other websites to speedup your site for first time visitors. PageCDN's <a href="https://pagecdn.com/public-cdn?src=easy-speedup" target="_blank">Public CDN</a> speeds up 100s of open-source libraries, 2,000+ WordPress themes and 10,000+ Plugins.</small>
 											</label>
 										</td>
 									</tr>
@@ -456,7 +456,7 @@
 							
 							<div class="inside">
 								
-								<p>PageCDN Plugin is compatible with <u><strong>Autoptimize</strong></u> and <u><strong>WP Super Cache</strong></u>. If you face difficulty in setting up this plugin, you can <a href="https://pagecdn.com/about/contacting-us" target="_blank">get someone from our side</a> to do it for you.</p>
+								<p>PageCDN Plugin is compatible with <u><strong>Autoptimize</strong></u> and <u><strong>WP Super Cache</strong></u>. If you face difficulty in setting up this plugin, you can <a href="https://pagecdn.com/about/contacting-us?src=easy-speedup" target="_blank">get someone from our side</a> to do it for you.</p>
 								
 							</div>
 							

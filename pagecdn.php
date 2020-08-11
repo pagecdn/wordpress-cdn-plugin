@@ -6,7 +6,7 @@
 	Author: PageCDN
 	Author URI: https://pagecdn.com
 	License: GPLv2 or later
-	Version: 5.7
+	Version: 5.10
 */
 	
 	defined( 'ABSPATH' ) OR exit;
@@ -19,7 +19,7 @@
 	//define( 'PAGECDN_CACHE'			, WP_CONTENT_DIR . '/cache/pagecdn/cache.json'	);
 	//define( 'PAGECDN_IMG_CACHE'		, WP_CONTENT_DIR . '/cache/pagecdn/images.json'	);
 	//define( 'PAGECDN_WEBP_CACHE'	, WP_CONTENT_DIR . '/cache/pagecdn/webp.json'	);
-	define( 'PAGECDN_VER'			, '5.7'											);
+	define( 'PAGECDN_VER'			, '5.10'										);
 	
 	$PageCDN_origin_scheme		= strtolower( parse_url( home_url( ) , PHP_URL_SCHEME ) );
 	$PageCDN_origin_host		= parse_url( home_url( ) , PHP_URL_HOST );
@@ -65,6 +65,17 @@
 	$PageCDN_known_img_URLs			= get_option( 'pagecdn-image-cache' , json_encode( array( ) ) );
 	
 	$PageCDN_known_webp_URLs		= get_option( 'pagecdn-webp-cache' , json_encode( array( ) ) );
+	
+	
+	
+	#	These lines are for removal in later versions
+	#	Disabling Image Cache
+	
+	update_option( 'pagecdn-image-cache' , json_encode( array( ) ) , false );
+	
+	update_option( 'pagecdn-webp-cache' , json_encode( array( ) ) , false );
+	
+	
 	
 	
 	if( is_string( $PageCDN_known_URLs ) )
