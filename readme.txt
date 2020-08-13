@@ -2,7 +2,7 @@
 Contributors: pagecdn
 Tags: CDN, speedup, Performance, Pagespeed, Free CDN, Open-source CDN, Private CDN, WordPress CDN, WP CDN, fastest, super, brotli, CDN Enabler, Autoptimize, WP Super Cache, W3 Total Cache, image optimizer, image cdn, optimize images, http2 server push
 Requires at least: 4.0
-Tested up to: 5.4
+Tested up to: 5.5
 Requires PHP: 5.3
 Stable tag: trunk
 License: GPLv2 or later
