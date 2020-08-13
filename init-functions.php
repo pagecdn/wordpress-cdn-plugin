@@ -63,12 +63,15 @@
 	
 	function PageCDN_options( $option = null )
 	{
-		Static $options	= null;
+		Global $PageCDN_options;
 		
-		if( $options === null )
+		//Static $options	= null;
+		
+		if( $PageCDN_options === null )
 		{
-			$options	= wp_parse_args( get_option('pagecdn') , PageCDN_defaults( ) );
+			$PageCDN_options	= wp_parse_args( get_option('pagecdn') , PageCDN_defaults( ) );
 			
+			/*
 			if( is_admin( ) && strlen( $options['pagecdn_api_key'] ) && strlen( $options['url'] ) )
 			{
 				$repo	= trim( parse_url( $options['url'] , PHP_URL_PATH ) , '/' );
@@ -89,19 +92,20 @@
 					}
 				}
 			}
+			*/
 		}
 		
 		if( $option )
 		{
-			if( isset( $options[$option] ) )
+			if( isset( $PageCDN_options[$option] ) )
 			{
-				return $options[$option];
+				return $PageCDN_options[$option];
 			}
 			
 			return '';
 		}
 		
-		return $options;
+		return $PageCDN_options;
 	}
 	
 	function PageCDN_preconnect( )

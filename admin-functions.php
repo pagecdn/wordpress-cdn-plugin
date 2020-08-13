@@ -433,6 +433,8 @@
 			$disabled_if_not_premium	= '';
 		}
 		
+		PageCDN_collect_repo_data();
+		
 		$options = PageCDN_options();
 		
 		require PAGECDN_DIR . '/settings.php';
@@ -450,5 +452,33 @@
 		
 		return $tool;
 	}
+	
+	
+	function PageCDN_collect_repo_data( )
+	{
+		Global $PageCDN_options;
+		
+		if( strlen( $PageCDN_options['pagecdn_api_key'] ) && strlen( $PageCDN_options['url'] ) )
+		{
+			$repo	= trim( parse_url( $PageCDN_options['url'] , PHP_URL_PATH ) , '/' );
+			
+			$apikey	= $PageCDN_options['pagecdn_api_key'];
+			
+			if( $response = PageCDN_get_API_response( '/private/repo/info' , array( 'apikey' => $apikey , 'repo' => $repo ) ) )
+			{
+				if( !PageCDN_display_API_error( $response ) )
+				{
+					$response	= $response['response'];
+					
+					$PageCDN_options['compression_level']	= $response['compression_level'];
+					$PageCDN_options['http2_server_push']	= $response['server_push'] && $response['server_push_trigger'];
+					$PageCDN_options['update_css_paths']	= $response['update_css_paths'];
+					$PageCDN_options['http_cache_ttl']		= strtotime( "+{$response['browser_cache_number']} {$response['browser_cache_period']}" , 0 );
+					$PageCDN_options['cache_control']		= !!$PageCDN_options['http_cache_ttl'];
+				}
+			}
+		}
+	}
+	
 	
 	
