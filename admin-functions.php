@@ -328,7 +328,7 @@
 	
 	function PageCDN_settings_add_page( )
 	{
-		add_options_page( 'PageCDN' , 'PageCDN' , 'manage_options' , 'pagecdn' , 'PageCDN_settings_page' );
+		add_options_page( 'Easy Speedup' , 'Easy Speedup' , 'manage_options' , 'pagecdn' , 'PageCDN_settings_page' );
 	}
 	
 	
@@ -422,6 +422,8 @@
 	
 	function PageCDN_settings_page( )
 	{
+		Global $PageCDN_theme_code;
+		
 		$checked_if_premium			= '';
 		
 		$disabled_if_not_premium	= 'disabled';
